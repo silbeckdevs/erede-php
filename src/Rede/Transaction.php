@@ -377,7 +377,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
                 'origin' => $this->origin,
                 'distributorAffiliation' => $this->distributorAffiliation,
                 'storageCard' => $this->storageCard,
-                'urls' => $this->urls,
+                'urls' => $this->urls ?: null,
                 'iata' => $this->iata,
                 'additional' => $this->additional
             ],
