@@ -2,16 +2,10 @@
 
 namespace Rede;
 
-use DateTime;
-use Exception;
-
 trait CreateTrait
 {
     /**
-     * @param object $data
-     *
-     * @return object
-     * @throws Exception
+     * @throws \Exception
      */
     public static function create(object $data): object
     {
@@ -21,8 +15,8 @@ trait CreateTrait
 
         foreach ($dataKeys as $property => $value) {
             if (array_key_exists($property, $objectKeys)) {
-                if ($property == 'requestDateTime' || $property == 'dateTime' || $property == 'refundDateTime') {
-                    $value = new DateTime($value);
+                if ('requestDateTime' == $property || 'dateTime' == $property || 'refundDateTime' == $property) {
+                    $value = new \DateTime($value);
                 }
 
                 $object->{$property} = $value;

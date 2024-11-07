@@ -2,27 +2,18 @@
 
 namespace Rede\Service;
 
-use InvalidArgumentException;
 use Rede\Exception\RedeException;
 use Rede\Transaction;
-use RuntimeException;
 
 class GetTransactionService extends AbstractTransactionsService
 {
-    /**
-     * @var ?string
-     */
     private ?string $reference = null;
 
-    /**
-     * @var bool
-     */
     private bool $refund = false;
 
     /**
-     * @return Transaction
-     * @throws InvalidArgumentException
-     * @throws RuntimeException
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      * @throws RedeException
      */
     public function execute(): Transaction
@@ -31,19 +22,16 @@ class GetTransactionService extends AbstractTransactionsService
     }
 
     /**
-     * @param string $reference
-     *
      * @return $this
      */
     public function setReference(string $reference): static
     {
         $this->reference = $reference;
+
         return $this;
     }
 
     /**
-     * @param bool $refund
-     *
      * @return $this
      */
     public function setRefund(bool $refund = true): static
@@ -53,12 +41,9 @@ class GetTransactionService extends AbstractTransactionsService
         return $this;
     }
 
-    /**
-     * @return string
-     */
     protected function getService(): string
     {
-        if ($this->reference !== null) {
+        if (null !== $this->reference) {
             return sprintf('%s?reference=%s', parent::getService(), $this->reference);
         }
 

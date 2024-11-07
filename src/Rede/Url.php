@@ -14,39 +14,33 @@ class Url implements RedeSerializable
     {
     }
 
-    /**
-     * @return string
-     */
     public function getUrl(): string
     {
         return $this->url;
     }
 
     /**
-     * @param string $url
      * @return $this
      */
     public function setUrl(string $url): static
     {
         $this->url = $url;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getKind(): string
     {
         return $this->kind;
     }
 
     /**
-     * @param string $kind
      * @return $this
      */
     public function setKind(string $kind): static
     {
         $this->kind = $kind;
+
         return $this;
     }
 }

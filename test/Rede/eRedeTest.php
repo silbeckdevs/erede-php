@@ -8,39 +8,29 @@ use Monolog\Level;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use RuntimeException;
 
 /**
- * Class eRedeTest
- * @package Rede
+ * Class eRedeTest.
+ *
  * @testdox eRede PHP SDK
  * phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  */
 class eRedeTest extends TestCase
 {
-    /**
-     * @var Store|null
-     */
     private ?Store $store = null;
 
-    /**
-     * @var LoggerInterface|null
-     */
     private ?LoggerInterface $logger = null;
 
-    /**
-     * @var int
-     */
     private static int $sequence = 1;
 
     protected function setUp(): void
     {
         $filiation = getenv('REDE_PV');
         $token = getenv('REDE_TOKEN');
-        $debug = (int)getenv('REDE_DEBUG');
+        $debug = (int) getenv('REDE_DEBUG');
 
         if (empty($filiation) || empty($token)) {
-            throw new RuntimeException('Você precisa informar seu PV e Token para rodar os testes');
+            throw new \RuntimeException('Você precisa informar seu PV e Token para rodar os testes');
         }
 
         $this->logger = new Logger('eRede SDK Test');
@@ -60,7 +50,7 @@ class eRedeTest extends TestCase
             '5448280000000007',
             '235',
             '12',
-            (int)date('Y') + 1,
+            (int) date('Y') + 1,
             'John Snow'
         )->capture(false);
 
@@ -75,7 +65,7 @@ class eRedeTest extends TestCase
             '5448280000000007',
             '235',
             '12',
-            (int)date('Y') + 1,
+            (int) date('Y') + 1,
             'John Snow'
         )->capture();
 
@@ -90,7 +80,7 @@ class eRedeTest extends TestCase
             '5448280000000007',
             '235',
             '12',
-            (int)date('Y') + 1,
+            (int) date('Y') + 1,
             'John Snow'
         )->setInstallments(3);
 
@@ -105,7 +95,7 @@ class eRedeTest extends TestCase
             '5448280000000007',
             '235',
             '12',
-            (int)date('Y') + 1,
+            (int) date('Y') + 1,
             'John Snow'
         )->setSoftDescriptor('Loja X');
 
@@ -120,7 +110,7 @@ class eRedeTest extends TestCase
             '5448280000000007',
             '235',
             '12',
-            (int)date('Y') + 1,
+            (int) date('Y') + 1,
             'John Snow'
         )->additional(1234, 56);
 
@@ -138,7 +128,7 @@ class eRedeTest extends TestCase
             '5448280000000007',
             '235',
             '12',
-            (int)date('Y') + 1,
+            (int) date('Y') + 1,
             'John Snow'
         )->mcc(
             'LOJADOZE',
@@ -164,7 +154,7 @@ class eRedeTest extends TestCase
             '5448280000000007',
             '235',
             '12',
-            (int)date('Y') + 1,
+            (int) date('Y') + 1,
             'John Snow'
         )->iata('101010', '250');
 
@@ -179,7 +169,7 @@ class eRedeTest extends TestCase
             '5448280000000007',
             '235',
             '12',
-            (int)date('Y') + 1,
+            (int) date('Y') + 1,
             'John Snow'
         )->setSoftDescriptor('Loja X');
 
@@ -194,7 +184,7 @@ class eRedeTest extends TestCase
             '5277696455399733',
             '123',
             '12',
-            (int)date('Y') + 1,
+            (int) date('Y') + 1,
             'John Snow'
         );
 
@@ -219,7 +209,7 @@ class eRedeTest extends TestCase
 
         $this->assertContains($returnCode, ['220', '201']);
 
-        if ($returnCode === '220') {
+        if ('220' === $returnCode) {
             $this->assertNotEmpty($transaction->getThreeDSecure()->getUrl());
 
             printf("\tURL de autenticação: %s\n", $transaction->getThreeDSecure()->getUrl());
@@ -234,7 +224,7 @@ class eRedeTest extends TestCase
                 '5448280000000007',
                 '235',
                 '12',
-                (int)date('Y') + 1,
+                (int) date('Y') + 1,
                 'John Snow'
             )->capture(false)
         );
@@ -257,7 +247,7 @@ class eRedeTest extends TestCase
         // Then we capture the authorized transaction
         $canceledTransaction = $this->createERede()
             ->cancel((new Transaction(20.99))
-                ->setTid((string)$authorizedTransaction->getTid()));
+                ->setTid((string) $authorizedTransaction->getTid()));
 
         $this->assertEquals('359', $canceledTransaction->getReturnCode());
     }
@@ -269,11 +259,11 @@ class eRedeTest extends TestCase
     {
         // First we create a new transaction
         $authorizedTransaction = $this->createAnAuthorizedTransaction();
-        $contultedTransaction = $this->createERede()->get((string)$authorizedTransaction->getTid());
+        $contultedTransaction = $this->createERede()->get((string) $authorizedTransaction->getTid());
         $authorization = $contultedTransaction->getAuthorization();
 
-        if ($authorization === null) {
-            throw new RuntimeException('Something happened with the authorized transaction');
+        if (null === $authorization) {
+            throw new \RuntimeException('Something happened with the authorized transaction');
         }
 
         $this->assertEquals($authorizedTransaction->getTid(), $authorization->getTid());
@@ -283,11 +273,11 @@ class eRedeTest extends TestCase
     {
         // First we create a new transaction
         $authorizedTransaction = $this->createAnAuthorizedTransaction();
-        $contultedTransaction = $this->createERede()->getByReference((string)$authorizedTransaction->getReference());
+        $contultedTransaction = $this->createERede()->getByReference((string) $authorizedTransaction->getReference());
         $authorization = $contultedTransaction->getAuthorization();
 
-        if ($authorization === null) {
-            throw new RuntimeException('Something happened with the authorized transaction');
+        if (null === $authorization) {
+            throw new \RuntimeException('Something happened with the authorized transaction');
         }
 
         $this->assertEquals($authorizedTransaction->getReference(), $authorization->getReference());
@@ -303,12 +293,12 @@ class eRedeTest extends TestCase
         // Them we cancel the authorized transaction
         $canceledTransaction = $this->createERede()
             ->cancel((new Transaction(20.99))
-                ->setTid((string)$authorizedTransaction->getTid()));
+                ->setTid((string) $authorizedTransaction->getTid()));
 
         $this->assertEquals('359', $canceledTransaction->getReturnCode());
 
         // Now we can consult the refunds
-        $refundedTransactions = $this->createERede()->getRefunds((string)$authorizedTransaction->getTid());
+        $refundedTransactions = $this->createERede()->getRefunds((string) $authorizedTransaction->getTid());
 
         $this->assertCount(1, $refundedTransactions->getRefunds());
 
@@ -317,9 +307,6 @@ class eRedeTest extends TestCase
         }
     }
 
-    /**
-     * @return Transaction
-     */
     private function createAnAuthorizedTransaction(): Transaction
     {
         return $this->createERede()->create(
@@ -327,19 +314,16 @@ class eRedeTest extends TestCase
                 '5448280000000007',
                 '235',
                 12,
-                (int)date('Y') + 1,
+                (int) date('Y') + 1,
                 'John Snow'
             )->capture()
         );
     }
 
-    /**
-     * @return eRede
-     */
     private function createERede(): eRede
     {
-        if ($this->store === null || $this->logger === null) {
-            throw new RuntimeException('Store cant be null');
+        if (null === $this->store || null === $this->logger) {
+            throw new \RuntimeException('Store cant be null');
         }
 
         return new eRede($this->store, $this->logger);

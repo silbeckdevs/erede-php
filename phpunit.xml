@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
+    bootstrap="vendor/autoload.php"
+    colors="true"
+    backupGlobals="false"
+    cacheResult="false"
+    cacheDirectory="cache/phpunit"
+    backupStaticProperties="false"
+    displayDetailsOnIncompleteTests="true"
+    displayDetailsOnSkippedTests="true"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnTestsThatTriggerErrors="true"
+    displayDetailsOnTestsThatTriggerNotices="true"
+    displayDetailsOnTestsThatTriggerWarnings="true"
+>
+  <testsuites>
+    <testsuite name="Tests">
+      <directory suffix="Test.php">tests</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <includePath>.</includePath>
+    <cookie name="locale" value="pt-br"/>
+    <env name="REMOTE_ADDR" value="127.0.0.1"/>
+    <server name="REMOTE_ADDR" value="127.0.0.1"/>
+    <server name="SERVER_ADDR" value="127.0.0.1"/>
+    <request name="foo" value="bar"/>
+    <server name="REQUEST_URI" value="/"/>
+    <server name="HTTPS" value="on"/>
+    <server name="HTTP_X_FORWARDED_FOR" value="127.0.0.1"/>
+    <server name="SERVER_PORT" value="443"/>
+    <server name="REQUEST_METHOD" value="GET"/>
+    <server name="SERVER_NAME" value="localhost:8879"/>
+  </php>
+</phpunit>
