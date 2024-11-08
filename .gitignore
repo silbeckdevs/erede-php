@@ -17,3 +17,4 @@ cghooks.lock
 .idea
 composer.lock
 .phpunit.result.cache
+env.test.php

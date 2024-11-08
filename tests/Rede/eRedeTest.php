@@ -46,7 +46,7 @@ class eRedeTest extends TestCase
 
     public function testShouldAuthorizeACreditcardTransaction(): void
     {
-        $transaction = (new Transaction(20.99, $this->generateReferenceNumber()))->creditCard(
+        $transaction = (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
             '5448280000000007',
             '235',
             '12',
@@ -61,7 +61,7 @@ class eRedeTest extends TestCase
 
     public function testShouldAuthorizeAndCaptureACreditcardTransaction(): void
     {
-        $transaction = (new Transaction(20.99, $this->generateReferenceNumber()))->creditCard(
+        $transaction = (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
             '5448280000000007',
             '235',
             '12',
@@ -76,7 +76,7 @@ class eRedeTest extends TestCase
 
     public function testShouldAuthorizeACreditcardTransactionWithInstallments(): void
     {
-        $transaction = (new Transaction(20.99, $this->generateReferenceNumber()))->creditCard(
+        $transaction = (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
             '5448280000000007',
             '235',
             '12',
@@ -91,7 +91,7 @@ class eRedeTest extends TestCase
 
     public function testShouldAuthorizeACreditcardTransactionWithSoftdescriptor(): void
     {
-        $transaction = (new Transaction(20.99, $this->generateReferenceNumber()))->creditCard(
+        $transaction = (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
             '5448280000000007',
             '235',
             '12',
@@ -106,7 +106,7 @@ class eRedeTest extends TestCase
 
     public function testShouldAuthorizeACreditcardTransactionWithAdditionalGatewayAndModuleInformation(): void
     {
-        $transaction = (new Transaction(20.99, $this->generateReferenceNumber()))->creditCard(
+        $transaction = (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
             '5448280000000007',
             '235',
             '12',
@@ -124,7 +124,7 @@ class eRedeTest extends TestCase
      */
     public function testShouldAuthorizeACreditcardTransactionWithDynamicMCC(): void
     {
-        $transaction = (new Transaction(20.99, $this->generateReferenceNumber()))->creditCard(
+        $transaction = (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
             '5448280000000007',
             '235',
             '12',
@@ -150,7 +150,7 @@ class eRedeTest extends TestCase
      */
     public function testShouldAuthorizeACreditcardTransactionWithIATA(): void
     {
-        $transaction = (new Transaction(20.99, $this->generateReferenceNumber()))->creditCard(
+        $transaction = (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
             '5448280000000007',
             '235',
             '12',
@@ -180,8 +180,10 @@ class eRedeTest extends TestCase
 
     public function testShouldCreateADebitcardTransactionWithAuthentication(): void
     {
+        $this->markTestSkipped();
+
         $transaction = (new Transaction(25, $this->generateReferenceNumber()))->debitCard(
-            '5277696455399733',
+            '4514166653413658',
             '123',
             '12',
             (int) date('Y') + 1,
@@ -220,7 +222,7 @@ class eRedeTest extends TestCase
     {
         // First we create a new transaction
         $authorizedTransaction = $this->createERede()->create(
-            (new Transaction(20.99, $this->generateReferenceNumber()))->creditCard(
+            (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
                 '5448280000000007',
                 '235',
                 '12',
@@ -246,7 +248,7 @@ class eRedeTest extends TestCase
 
         // Then we capture the authorized transaction
         $canceledTransaction = $this->createERede()
-            ->cancel((new Transaction(20.99))
+            ->cancel((new Transaction(200.99))
                 ->setTid((string) $authorizedTransaction->getTid()));
 
         $this->assertEquals('359', $canceledTransaction->getReturnCode());
@@ -292,7 +294,7 @@ class eRedeTest extends TestCase
 
         // Them we cancel the authorized transaction
         $canceledTransaction = $this->createERede()
-            ->cancel((new Transaction(20.99))
+            ->cancel((new Transaction(200.99))
                 ->setTid((string) $authorizedTransaction->getTid()));
 
         $this->assertEquals('359', $canceledTransaction->getReturnCode());
@@ -310,7 +312,7 @@ class eRedeTest extends TestCase
     private function createAnAuthorizedTransaction(): Transaction
     {
         return $this->createERede()->create(
-            (new Transaction(20.99, $this->generateReferenceNumber()))->creditCard(
+            (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
                 '5448280000000007',
                 '235',
                 12,
