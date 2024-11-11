@@ -7,6 +7,7 @@
 /test.php
 /.env
 /env.php
+/tests/config/env.php
 /teste.php
 error_log
 .phpunit.cache/*
