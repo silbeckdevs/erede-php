@@ -6,6 +6,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
 {
     public const CREDIT = 'credit';
     public const DEBIT = 'debit';
+    public const PIX = 'Pix';
 
     public const ORIGIN_EREDE = 1;
     public const ORIGIN_VISA_CHECKOUT = 4;
@@ -90,6 +91,10 @@ class Transaction implements RedeSerializable, RedeUnserializable
     private ?string $paymentFacilitatorID = null;
 
     private ?int $amount = null;
+
+    private ?QrCode $qrCode = null;
+
+    private ?\QrCodeResponse $qrCodeResponse = null;
 
     /**
      * Transaction constructor.
@@ -246,6 +251,29 @@ class Transaction implements RedeSerializable, RedeUnserializable
                 return !is_null($value);
             }
         );
+    }
+
+    public function getQrCode(): ?QrCode
+    {
+        return $this->qrCode;
+    }
+
+    public function setQrCode(QrCode $qrCode): static
+    {
+        $this->qrCode = $qrCode;
+
+        return $this;
+    }
+
+    public function QrCode(?string $dateTimeExpiration): static
+    {
+        $this->qrCode = new QrCode();
+        if (null !== $dateTimeExpiration) {
+            $this->qrCode->setDateTimeExpiration($dateTimeExpiration);
+        }
+        $this->setKind(Transaction::PIX);
+
+        return $this;
     }
 
     public function getAmount(): ?int
@@ -710,6 +738,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
             }
 
             match ($property) {
+                'QrCode' => $this->unserializeQrCode($property, $value),
                 'refunds' => $this->unserializeRefunds($property, $value),
                 'urls' => $this->unserializeUrls($property, $value),
                 'capture' => $this->unserializeCapture($property, $value),
@@ -723,6 +752,16 @@ class Transaction implements RedeSerializable, RedeUnserializable
         }
 
         return $this;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function unserializeQrCode(string $property, array $value): void
+    {
+        if ('qrcode' === $property && is_object($value)) {
+            $this->qrCode = QrCode::create($value);
+        }
     }
 
     /**
