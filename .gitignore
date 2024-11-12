@@ -1,9 +1,15 @@
 /vendor/*
 /config/app.php
+/tmp/*
+/.env
 /test.php
 /teste.php
+error_log
+.phpunit.cache/*
 .vscode/settings.json
 .php-cs-fixer.cache
 cghooks.lock
+.idea
 composer.lock
+.phpunit.result.cache
 env.test.php

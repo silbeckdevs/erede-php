@@ -73,7 +73,7 @@ class ThreeDSecure implements RedeSerializable
         return $this->returnMessage;
     }
 
-    public function getDevice(): Device
+    public function getDevice(): ?Device
     {
         return $this->Device;
     }

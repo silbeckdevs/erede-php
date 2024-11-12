@@ -94,8 +94,6 @@ class Transaction implements RedeSerializable, RedeUnserializable
 
     private ?QrCode $qrCode = null;
 
-    private ?\QrCodeResponse $qrCodeResponse = null;
-
     /**
      * Transaction constructor.
      */
@@ -246,6 +244,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
                 'urls' => $this->urls ?: null,
                 'iata' => $this->iata,
                 'additional' => $this->additional,
+                'qrCode' => $this->qrCode,
             ],
             function ($value) {
                 return !is_null($value);
@@ -265,12 +264,10 @@ class Transaction implements RedeSerializable, RedeUnserializable
         return $this;
     }
 
-    public function QrCode(?string $dateTimeExpiration): static
+    public function createQrCode(\DateTimeInterface $dateTimeExpiration): static
     {
         $this->qrCode = new QrCode();
-        if (null !== $dateTimeExpiration) {
-            $this->qrCode->setDateTimeExpiration($dateTimeExpiration);
-        }
+        $this->qrCode->setDateTimeExpiration($dateTimeExpiration);
         $this->setKind(Transaction::PIX);
 
         return $this;
@@ -727,7 +724,6 @@ class Transaction implements RedeSerializable, RedeUnserializable
     public function jsonUnserialize(string $serialized): static
     {
         $properties = json_decode($serialized);
-
         if (JSON_ERROR_NONE !== json_last_error()) {
             throw new \InvalidArgumentException(sprintf('JSON: %s', json_last_error_msg()));
         }
@@ -738,7 +734,6 @@ class Transaction implements RedeSerializable, RedeUnserializable
             }
 
             match ($property) {
-                'QrCode' => $this->unserializeQrCode($property, $value),
                 'refunds' => $this->unserializeRefunds($property, $value),
                 'urls' => $this->unserializeUrls($property, $value),
                 'capture' => $this->unserializeCapture($property, $value),
@@ -747,21 +742,12 @@ class Transaction implements RedeSerializable, RedeUnserializable
                 'threeDSecure' => $this->unserializeThreeDSecure($property, $value),
                 'requestDateTime', 'dateTime', 'refundDateTime' => $this->unserializeRequestDateTime($property, $value),
                 'brand' => $this->unserializeBrand($property, $value),
+                'qrCodeResponse' => $this->unserializeQrCode($property, $value),
                 default => $this->{$property} = $value,
             };
         }
 
         return $this;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function unserializeQrCode(string $property, array $value): void
-    {
-        if ('qrcode' === $property && is_object($value)) {
-            $this->qrCode = QrCode::create($value);
-        }
     }
 
     /**
@@ -773,12 +759,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
             $this->refunds = [];
 
             foreach ($value as $refundValue) {
-                /**
-                 * @var Refund $refund
-                 */
-                $refund = Refund::create($refundValue);
-
-                $this->refunds[] = $refund;
+                $this->refunds[] = (new Refund())->populate($refundValue);
             }
         }
     }
@@ -800,12 +781,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
     private function unserializeCapture(string $property, mixed $value): void
     {
         if ('capture' === $property && is_object($value)) {
-            /**
-             * @var Capture $capture
-             */
-            $capture = Capture::create($value);
-
-            $this->capture = $capture;
+            $this->capture = (new Capture())->populate($value);
         }
     }
 
@@ -815,12 +791,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
     private function unserializeAuthorization(string $property, mixed $value): void
     {
         if ('authorization' == $property && is_object($value)) {
-            /**
-             * @var Authorization $authorization
-             */
-            $authorization = Authorization::create($value);
-
-            $this->authorization = $authorization;
+            $this->authorization = (new Authorization())->populate($value);
         }
     }
 
@@ -830,12 +801,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
     private function unserializeAdditional(string $property, mixed $value): void
     {
         if ('additional' == $property && is_object($value)) {
-            /**
-             * @var Additional $additional
-             */
-            $additional = Additional::create($value);
-
-            $this->additional = $additional;
+            $this->additional = (new Additional())->populate($value);
         }
     }
 
@@ -845,12 +811,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
     private function unserializeThreeDSecure(string $property, mixed $value): void
     {
         if ('threeDSecure' == $property && is_object($value)) {
-            /**
-             * @var ThreeDSecure $threeDSecure
-             */
-            $threeDSecure = ThreeDSecure::create($value);
-
-            $this->threeDSecure = $threeDSecure;
+            $this->threeDSecure = (new ThreeDSecure())->populate($value);
         }
     }
 
@@ -872,12 +833,17 @@ class Transaction implements RedeSerializable, RedeUnserializable
     private function unserializeBrand(string $property, mixed $value): void
     {
         if ('brand' == $property) {
-            /**
-             * @var Brand $brand
-             */
-            $brand = Brand::create($value);
+            $this->brand = (new Brand())->populate($value);
+        }
+    }
 
-            $this->brand = $brand;
+    /**
+     * @throws \Exception
+     */
+    private function unserializeQrCode(string $property, mixed $value): void
+    {
+        if (('qrCodeResponse' === $property) && is_object($value)) {
+            $this->qrCode = (new QrCode())->populate($value);
         }
     }
 }

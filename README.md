@@ -5,20 +5,21 @@ SDK de integração eRede
 # Funcionalidades
 
 Este SDK possui as seguintes funcionalidades:
-* Autorização
-* Captura
-* Consultas
-* Cancelamento
-* 3DS2
-* Zero dollar
-* iata
-* MCC dinâmico.
+
+- Autorização
+- Captura
+- Consultas
+- Cancelamento
+- 3DS2
+- Zero dollar
+- iata
+- MCC dinâmico.
 
 # Instalação
 
 ## Dependências
 
-* PHP >= 8.1
+- PHP >= 8.1
 
 ## Instalando o SDK
 
@@ -26,11 +27,10 @@ Se já possui um arquivo `composer.json`, basta adicionar a seguinte dependênci
 
 ```json
 {
-"require": {
+  "require": {
     "developersrede/erede-php": "*"
+  }
 }
-}
-
 ```
 
 Com a dependência adicionada ao `composer.json`, basta executar:
@@ -64,8 +64,9 @@ fazer:
 docker build . -t erede-docker
 docker run -e REDE_PV='1234' -e REDE_TOKEN='5678' erede-docker
 ```
+
 ````
-Caso necessário, o SDK possui a possibilidade de logs de depuração que podem ser utilizados ao executar os testes. Para isso, 
+Caso necessário, o SDK possui a possibilidade de logs de depuração que podem ser utilizados ao executar os testes. Para isso,
 basta exportar a variável de ambiente `REDE_DEBUG` com o valor 1:
 
 ```
@@ -369,3 +370,20 @@ if ($transaction->getReturnCode() == '220') {
     printf("Redirecione o cliente para \"%s\" para autenticação\n", $transaction->getThreeDSecure()->getUrl());
 }
 ```
+
+## Transação com PIX
+
+```php
+<?php
+// Configura a transação para o PIX e passa a data de expiração
+$transaction = (new Transaction(200.99, 'pedido' . time()))->createQrCode(new \DateTimeImmutable('+ 1 hour'));
+
+$transaction = (new eRede($store))->create($transaction);
+
+if ($transaction->getReturnCode() == '00') {
+    printf(
+        "Transação criada com sucesso; tid=%s, qrCodeData=%s, qrCodeImage=%s\n",
+        $transaction->getTid(), $transaction->getQrCode()->getQrCodeData(), $transaction->getQrCode()->getQrCodeImage()
+    );
+}
+````

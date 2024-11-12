@@ -2,25 +2,106 @@
 
 namespace Rede;
 
-class QrCode
+class QrCode implements RedeSerializable
 {
+    use SerializeTrait;
     use CreateTrait;
 
-    private string $dateTimeExpiration;
+    private ?\DateTimeInterface $dateTimeExpiration = null;
 
-    public function getDateTimeExpiration(): string
+    // Campos que retornam apenas na consulta
+    private ?\DateTimeInterface $dateTime = null;
+    private ?\DateTimeInterface $expirationQrCode = null;
+    private ?string $qrCodeImage = null;
+    private ?string $qrCodeData = null;
+    private ?string $returnCode = null;
+    private ?string $returnMessage = null;
+    private string|int|null $affiliation;
+    private ?string $kind = null;
+    private ?string $reference = null;
+    private string|int|null $amount;
+    private ?string $tid = null;
+    private ?string $status = null;
+
+    /**
+     * @return array<string,mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'dateTimeExpiration' => $this->getDateTimeExpiration()?->format('c') ?: null,
+        ];
+    }
+
+    public function getDateTimeExpiration(): ?\DateTimeInterface
     {
         return $this->dateTimeExpiration;
     }
 
-    public function setDateTimeExpiration(string $dateTimeExpiration): static
+    public function setDateTimeExpiration(\DateTimeInterface $dateTimeExpiration): static
     {
-        if (null !== $dateTimeExpiration && !preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/', $dateTimeExpiration)) {
-            throw new \InvalidArgumentException('The due date must be in the format YYYY-MM-DDThh:mm:ss.');
-        }
-
         $this->dateTimeExpiration = $dateTimeExpiration;
 
         return $this;
+    }
+
+    public function getDateTime(): ?\DateTimeInterface
+    {
+        return $this->dateTime;
+    }
+
+    public function getExpirationQrCode(): ?\DateTimeInterface
+    {
+        return $this->expirationQrCode;
+    }
+
+    public function getQrCodeImage(): ?string
+    {
+        return $this->qrCodeImage;
+    }
+
+    public function getQrCodeData(): ?string
+    {
+        return $this->qrCodeData;
+    }
+
+    public function getReturnCode(): ?string
+    {
+        return $this->returnCode;
+    }
+
+    public function getReturnMessage(): ?string
+    {
+        return $this->returnMessage;
+    }
+
+    public function getAffiliation(): int|string|null
+    {
+        return $this->affiliation;
+    }
+
+    public function getKind(): ?string
+    {
+        return $this->kind;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function getAmount(): int|string|null
+    {
+        return $this->amount;
+    }
+
+    public function getTid(): ?string
+    {
+        return $this->tid;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
     }
 }

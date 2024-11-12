@@ -6,6 +6,7 @@ namespace Rede;
 use Monolog\Handler\StreamHandler;
 use Monolog\Level;
 use Monolog\Logger;
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -33,8 +34,8 @@ class eRedeTest extends TestCase
             throw new \RuntimeException('Você precisa informar seu PV e Token para rodar os testes');
         }
 
-        $this->logger = new Logger('eRede SDK Test');
-        $this->logger->pushHandler(new StreamHandler('php://stdout', $debug ? Level::Debug : Level::Error));
+        // $this->logger = new Logger('eRede SDK Test');
+        // $this->logger->pushHandler(new StreamHandler('php://stdout', $debug ? Level::Debug : Level::Error));
 
         $this->store = new Store($filiation, $token, Environment::sandbox());
     }
@@ -181,7 +182,7 @@ class eRedeTest extends TestCase
     public function testShouldCreateADebitcardTransactionWithAuthentication(): void
     {
         $this->markTestSkipped();
-
+        // @phpstan-ignore-next-line
         $transaction = (new Transaction(25, $this->generateReferenceNumber()))->debitCard(
             '4514166653413658',
             '123',
@@ -322,9 +323,38 @@ class eRedeTest extends TestCase
         );
     }
 
+    public function testShouldCreatePixTransaction(): Transaction
+    {
+        $transaction = (new Transaction(200.99, $this->generateReferenceNumber()))->createQrCode(new \DateTimeImmutable('+ 1 hour'));
+
+        $transaction = $this->createERede()->create($transaction);
+
+        $this->assertEquals('00', $transaction->getReturnCode());
+        $this->assertInstanceOf(QrCode::class, $transaction->getQrCode());
+        $this->assertNotEmpty($transaction->getQrCode()->getDateTimeExpiration());
+        $this->assertNotEmpty($transaction->getQrCode()->getQrCodeImage());
+        $this->assertNotEmpty($transaction->getQrCode()->getQrCodeData());
+
+        return $transaction;
+    }
+
+    #[Depends('testShouldCreatePixTransaction')]
+    public function testShouldGetPixTransaction(Transaction $tr): Transaction
+    {
+        $transaction = $this->createERede()->get($tr->getTid() ?? '');
+        $this->assertInstanceOf(QrCode::class, $transaction->getQrCode());
+        $this->assertNotEmpty($transaction->getQrCode()->getQrCodeImage());
+        $this->assertNotEmpty($transaction->getQrCode()->getQrCodeData());
+        $this->assertNotEmpty($transaction->getQrCode()->getExpirationQrCode());
+        $this->assertSame('Pending', $transaction->getQrCode()->getStatus());
+        $this->assertSame(20099, $transaction->getQrCode()->getAmount());
+
+        return $transaction;
+    }
+
     private function createERede(): eRede
     {
-        if (null === $this->store || null === $this->logger) {
+        if (null === $this->store) {
             throw new \RuntimeException('Store cant be null');
         }
 

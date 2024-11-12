@@ -1,5 +1,6 @@
 parameters:
-	level: 8
-	paths:
-		- src
-		- test
+  level: 8
+  paths:
+    - ./
+  excludePaths:
+    - ./vendor/*

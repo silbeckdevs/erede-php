@@ -18,7 +18,7 @@ class Device implements RedeSerializable
     ) {
     }
 
-    public function getColorDepth(): ?string
+    public function getColorDepth(): string|int|null
     {
         return $this->ColorDepth;
     }
