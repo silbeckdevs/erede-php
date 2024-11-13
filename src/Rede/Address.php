@@ -7,12 +7,17 @@ class Address implements RedeSerializable
     use SerializeTrait;
 
     public const BILLING = 1;
+
     public const SHIPPING = 2;
+
     public const BOTH = 3;
 
     public const APARTMENT = 1;
+
     public const HOUSE = 2;
+
     public const COMMERCIAL = 3;
+
     public const OTHER = 4;
 
     private ?string $address = null;

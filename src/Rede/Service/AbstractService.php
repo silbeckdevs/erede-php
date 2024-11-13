@@ -11,7 +11,9 @@ use Rede\Transaction;
 abstract class AbstractService
 {
     public const GET = 'GET';
+
     public const POST = 'POST';
+
     public const PUT = 'PUT';
 
     private ?string $platform = null;

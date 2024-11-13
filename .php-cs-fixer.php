@@ -21,6 +21,7 @@ return (new PhpCsFixer\Config())
         'binary_operator_spaces' => ['default' => 'single_space'],
         'concat_space' => ['spacing' => 'one'],
         'increment_style' => ['style' => 'post'],
+        'class_attributes_separation' => true,
     ])
     ->setIndent('    ')
     ->setLineEnding("\n")

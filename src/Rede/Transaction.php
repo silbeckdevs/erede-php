@@ -5,11 +5,15 @@ namespace Rede;
 class Transaction implements RedeSerializable, RedeUnserializable
 {
     public const CREDIT = 'credit';
+
     public const DEBIT = 'debit';
+
     public const PIX = 'Pix';
 
     public const ORIGIN_EREDE = 1;
+
     public const ORIGIN_VISA_CHECKOUT = 4;
+
     public const ORIGIN_MASTERPASS = 6;
 
     private ?Additional $additional = null;

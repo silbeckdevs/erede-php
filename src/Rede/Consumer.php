@@ -7,6 +7,7 @@ class Consumer implements RedeSerializable
     use SerializeTrait;
 
     public const MALE = 'M';
+
     public const FEMALE = 'F';
 
     /**

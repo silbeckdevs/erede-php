@@ -5,7 +5,7 @@
   "php-cs-fixer.executablePath": "${workspaceFolder}/vendor/bin/php-cs-fixer",
   "[php]": {
     "editor.defaultFormatter": "junstyle.php-cs-fixer",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
     "editor.trimAutoWhitespace": true,

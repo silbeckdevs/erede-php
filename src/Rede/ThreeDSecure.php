@@ -10,9 +10,11 @@ class ThreeDSecure implements RedeSerializable
     public const DATA_ONLY = 'DATA_ONLY';
 
     public const CONTINUE_ON_FAILURE = 'continue';
+
     public const DECLINE_ON_FAILURE = 'decline';
 
     public const MPI_REDE = 'mpi_rede';
+
     public const MPI_THIRD_PARTY = 'mpi_third_party';
 
     private ?string $cavv = null;
@@ -25,7 +27,9 @@ class ThreeDSecure implements RedeSerializable
 
     private int $threeDIndicator = 2;
 
-    private ?string $DirectoryServerTransactionId = null;
+    private ?string $directoryServerTransactionId = null;
+
+    private ?string $ipAddress = null;
 
     private string $userAgent;
 
@@ -40,13 +44,13 @@ class ThreeDSecure implements RedeSerializable
     /**
      * ThreeDSecure constructor.
      *
-     * @param Device|null $Device    user device data
+     * @param Device|null $device    user device data
      * @param string      $onFailure what to do in case of failure
      * @param string      $mpi       the MPI is from Rede or third party
      * @param string|null $userAgent the user' user-agent
      */
     public function __construct(
-        private readonly ?Device $Device = null,
+        private readonly ?Device $device = null,
         private string $onFailure = self::DECLINE_ON_FAILURE,
         string $mpi = ThreeDSecure::MPI_REDE,
         ?string $userAgent = null,
@@ -75,7 +79,7 @@ class ThreeDSecure implements RedeSerializable
 
     public function getDevice(): ?Device
     {
-        return $this->Device;
+        return $this->device;
     }
 
     public function getThreeDIndicator(): int
@@ -105,15 +109,15 @@ class ThreeDSecure implements RedeSerializable
 
     public function getDirectoryServerTransactionId(): ?string
     {
-        return $this->DirectoryServerTransactionId;
+        return $this->directoryServerTransactionId;
     }
 
     /**
      * @return $this
      */
-    public function setDirectoryServerTransactionId(string $DirectoryServerTransactionId): static
+    public function setDirectoryServerTransactionId(string $directoryServerTransactionId): static
     {
-        $this->DirectoryServerTransactionId = $DirectoryServerTransactionId;
+        $this->directoryServerTransactionId = $directoryServerTransactionId;
 
         return $this;
     }
@@ -174,6 +178,18 @@ class ThreeDSecure implements RedeSerializable
     public function setUrl(string $url): static
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getIpAddress(): ?string
+    {
+        return $this->ipAddress;
+    }
+
+    public function setIpAddress(string $ipAddress): static
+    {
+        $this->ipAddress = $ipAddress;
 
         return $this;
     }

@@ -5,7 +5,9 @@ namespace Rede;
 class Environment implements RedeSerializable
 {
     public const PRODUCTION = 'https://api.userede.com.br/erede';
+
     public const SANDBOX = 'https://api.userede.com.br/desenvolvedores';
+
     public const VERSION = 'v1';
 
     private ?string $ip = null;

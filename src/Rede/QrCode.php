@@ -11,16 +11,27 @@ class QrCode implements RedeSerializable
 
     // Campos que retornam apenas na consulta
     private ?\DateTimeInterface $dateTime = null;
+
     private ?\DateTimeInterface $expirationQrCode = null;
+
     private ?string $qrCodeImage = null;
+
     private ?string $qrCodeData = null;
+
     private ?string $returnCode = null;
+
     private ?string $returnMessage = null;
+
     private string|int|null $affiliation;
+
     private ?string $kind = null;
+
     private ?string $reference = null;
+
     private string|int|null $amount;
+
     private ?string $tid = null;
+
     private ?string $status = null;
 
     /**

@@ -142,8 +142,6 @@ class ERedeIntegrationTest extends BaseIntegrationTestCase
 
     public function testShouldCreateADebitcardTransactionWithAuthentication(): void
     {
-        $this->markTestSkipped();
-        // @phpstan-ignore-next-line
         $transaction = (new Transaction(25, $this->generateReferenceNumber()))->debitCard(
             '4514166653413658',
             '123',
@@ -154,13 +152,13 @@ class ERedeIntegrationTest extends BaseIntegrationTestCase
 
         $transaction->threeDSecure(
             new Device(
-                ColorDepth: 1,
-                DeviceType3ds: 'BROWSER',
-                JavaEnabled: false,
-                Language: 'BR',
-                ScreenHeight: 500,
-                ScreenWidth: 500,
-                TimeZoneOffset: 3
+                colorDepth: 1,
+                deviceType3ds: 'BROWSER',
+                javaEnabled: false,
+                language: 'BR',
+                screenHeight: 500,
+                screenWidth: 500,
+                timeZoneOffset: 3
             ),
             ThreeDSecure::DECLINE_ON_FAILURE
         );

@@ -14,6 +14,7 @@ use Rede\Service\GetTransactionService;
 class eRede
 {
     public const VERSION = '6.1.0';
+
     public const USER_AGENT = 'eRede/' . eRede::VERSION . ' (PHP %s; Store %s; %s %s) %s';
 
     private ?string $platform = null;

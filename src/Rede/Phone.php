@@ -7,8 +7,11 @@ class Phone implements RedeSerializable
     use SerializeTrait;
 
     public const CELLPHONE = 1;
+
     public const HOME = 2;
+
     public const WORK = 3;
+
     public const OTHER = 4;
 
     /**

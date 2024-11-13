@@ -7,8 +7,11 @@ class Item implements RedeSerializable
     use SerializeTrait;
 
     public const PHYSICAL = 1;
+
     public const DIGITAL = 2;
+
     public const SERVICE = 3;
+
     public const AIRLINE = 4;
 
     private ?int $amount = null;

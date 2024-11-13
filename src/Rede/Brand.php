@@ -9,6 +9,7 @@ class Brand
     private ?string $name = null;
 
     private ?string $returnCode = null;
+
     private ?string $returnMessage = null;
 
     public function getName(): ?string
