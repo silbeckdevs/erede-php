@@ -1,6 +1,7 @@
 {
-  "name": "silbeck/template-php",
-  "description": "Template para iniciar projetos PHP",
+  "name": "developersrede/erede-php",
+  "version": "5.2.1",
+  "description": "e.Rede integration SDK",
   "minimum-stability": "stable",
   "license": "MIT",
   "type": "library",
@@ -8,14 +9,14 @@
     "php": "^8.2",
     "ext-curl": "*",
     "ext-json": "*",
-    "psr/log": "*",
-    "monolog/monolog": "*"
+    "psr/log": ">=3.0.2",
+    "monolog/monolog": ">=3.8"
   },
   "require-dev": {
-    "phpunit/phpunit": "^11.3.5",
-    "phpstan/phpstan": "^1.12.3",
+    "phpunit/phpunit": "^11.4.3",
+    "phpstan/phpstan": "^1.12.10",
     "kint-php/kint": "^5.1.1",
-    "monolog/monolog": "^3.7.0",
+    "monolog/monolog": "^3.8.0",
     "friendsofphp/php-cs-fixer": "^3.64",
     "brainmaestro/composer-git-hooks": "^3.0"
   },
@@ -26,7 +27,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Rede\\": "tests/Rede"
+      "Rede\\Tests\\": "tests/"
     }
   },
   "scripts": {
@@ -56,5 +57,11 @@
         "composer format:check"
       ]
     }
-  }
+  },
+  "authors": [
+    {
+      "name": "João Batista Neto",
+      "email": "neto.joaobatista@gmail.com"
+    }
+  ]
 }

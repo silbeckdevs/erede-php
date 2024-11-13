@@ -1,11 +1,11 @@
 <?php
 
-namespace Rede\Unit;
+namespace Rede\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
 use Rede\QrCode;
+use Rede\Tests\BaseTestCase;
 
-class QrCodeUnitTest extends TestCase
+class QrCodeUnitTest extends BaseTestCase
 {
     public function testShouldPopulateQrCode(): void
     {

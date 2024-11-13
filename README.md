@@ -2,7 +2,7 @@
 
 SDK de integração eRede
 
-# Funcionalidades
+## Funcionalidades
 
 Este SDK possui as seguintes funcionalidades:
 
@@ -14,8 +14,7 @@ Este SDK possui as seguintes funcionalidades:
 - Zero dollar
 - iata
 - MCC dinâmico.
-
-# Instalação
+- PIX
 
 ## Dependências
 
@@ -35,45 +34,28 @@ Se já possui um arquivo `composer.json`, basta adicionar a seguinte dependênci
 
 Com a dependência adicionada ao `composer.json`, basta executar:
 
-```
+```bash
 composer install
 ```
 
 Alternativamente, você pode executar diretamente em seu terminal:
 
-```
+```bash
 composer require "developersrede/erede-php"
 ```
 
-# Testes
+## Testes
 
 O SDK utiliza PHPUnit com TestDox para os testes. Para executá-los em ambiente local, você precisa exportar
 as variáveis de ambiente `REDE_PV` e `REDE_TOKEN` com suas credenciais da API. Feito isso, basta rodar:
 
-```
+```bash
 export REDE_PV=1234
 export REDE_TOKEN=5678
-
-./tests
+export REDE_DEBUG=0
 ```
 
-Os testes também podem ser executados através de um container com a configuração ideal para o projeto. Para isso, basta
-fazer:
-
-```
-docker build . -t erede-docker
-docker run -e REDE_PV='1234' -e REDE_TOKEN='5678' erede-docker
-```
-
-````
-Caso necessário, o SDK possui a possibilidade de logs de depuração que podem ser utilizados ao executar os testes. Para isso,
-basta exportar a variável de ambiente `REDE_DEBUG` com o valor 1:
-
-```
-export REDE_DEBUG=1
-```
-
-# Utilizando
+Ou copie o arquivo `tests/config/env.test.php.example` para `tests/config/env.test.php` e adicione as suas credenciais
 
 ## Autorizando uma transação
 
@@ -131,6 +113,7 @@ if ($transaction->getReturnCode() == '00') {
 ```
 
 ## Adiciona configuração de parcelamento
+
 ```php
 <?php
 // Configuração da loja em modo produção
@@ -386,4 +369,4 @@ if ($transaction->getReturnCode() == '00') {
         $transaction->getTid(), $transaction->getQrCode()->getQrCodeData(), $transaction->getQrCode()->getQrCodeImage()
     );
 }
-````
+```

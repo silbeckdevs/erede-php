@@ -11,6 +11,9 @@ env:
   PHP_VERSION: 8.3
   PHP_EXTENSIONS: mbstring
   PHP_TOOLS: composer:v2, phpunit:11
+  REDE_PV: ${{ secrets.REDE_PV }}
+  REDE_TOKEN: ${{ secrets.REDE_TOKEN }}
+  REDE_DEBUG: ${{ vars.REDE_DEBUG }}
 
 permissions:
   id-token: write

@@ -1,50 +1,17 @@
 <?php
 
-namespace Rede;
+namespace Rede\Tests\E2E;
 
-// Configuração da loja em modo produção
-use Monolog\Handler\StreamHandler;
-use Monolog\Level;
-use Monolog\Logger;
 use PHPUnit\Framework\Attributes\Depends;
-use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
+use Rede\Device;
+use Rede\QrCode;
+use Rede\SubMerchant;
+use Rede\ThreeDSecure;
+use Rede\Transaction;
+use Rede\Url;
 
-/**
- * Class eRedeTest.
- *
- * @testdox eRede PHP SDK
- * phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
- */
-class eRedeTest extends TestCase
+class ERedeIntegrationTest extends BaseIntegrationTestCase
 {
-    private ?Store $store = null;
-
-    private ?LoggerInterface $logger = null;
-
-    private static int $sequence = 1;
-
-    protected function setUp(): void
-    {
-        $filiation = getenv('REDE_PV');
-        $token = getenv('REDE_TOKEN');
-        $debug = (int) getenv('REDE_DEBUG');
-
-        if (empty($filiation) || empty($token)) {
-            throw new \RuntimeException('Você precisa informar seu PV e Token para rodar os testes');
-        }
-
-        // $this->logger = new Logger('eRede SDK Test');
-        // $this->logger->pushHandler(new StreamHandler('php://stdout', $debug ? Level::Debug : Level::Error));
-
-        $this->store = new Store($filiation, $token, Environment::sandbox());
-    }
-
-    private function generateReferenceNumber(): string
-    {
-        return 'pedido' . (time() + eRedeTest::$sequence++);
-    }
-
     public function testShouldAuthorizeACreditcardTransaction(): void
     {
         $transaction = (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
@@ -120,9 +87,6 @@ class eRedeTest extends TestCase
         $this->assertEquals('00', $transaction->getReturnCode());
     }
 
-    /**
-     * @testdox Should authorize a credit card transaction with dynamic MCC
-     */
     public function testShouldAuthorizeACreditcardTransactionWithDynamicMCC(): void
     {
         $transaction = (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
@@ -146,9 +110,6 @@ class eRedeTest extends TestCase
         $this->assertEquals('00', $transaction->getReturnCode());
     }
 
-    /**
-     * @testdox Should authorize a credit card transaction with IATA
-     */
     public function testShouldAuthorizeACreditcardTransactionWithIATA(): void
     {
         $transaction = (new Transaction(200.99, $this->generateReferenceNumber()))->creditCard(
@@ -255,9 +216,6 @@ class eRedeTest extends TestCase
         $this->assertEquals('359', $canceledTransaction->getReturnCode());
     }
 
-    /**
-     * @testdox Should consult a transaction by its TID
-     */
     public function testShouldConsultATransactionByItsTID(): void
     {
         // First we create a new transaction
@@ -350,14 +308,5 @@ class eRedeTest extends TestCase
         $this->assertSame(20099, $transaction->getQrCode()->getAmount());
 
         return $transaction;
-    }
-
-    private function createERede(): eRede
-    {
-        if (null === $this->store) {
-            throw new \RuntimeException('Store cant be null');
-        }
-
-        return new eRede($this->store, $this->logger);
     }
 }
