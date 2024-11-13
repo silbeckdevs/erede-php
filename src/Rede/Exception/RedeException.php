@@ -2,8 +2,6 @@
 
 namespace Rede\Exception;
 
-use RuntimeException;
-
-class RedeException extends RuntimeException
+class RedeException extends \RuntimeException
 {
 }

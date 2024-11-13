@@ -6,19 +6,10 @@ class Cart implements RedeSerializable
 {
     use SerializeTrait;
 
-    /**
-     * @var Address|null
-     */
     private ?Address $billing = null;
 
-    /**
-     * @var Consumer|null
-     */
     private ?Consumer $consumer = null;
 
-    /**
-     * @var Iata|null
-     */
     private ?Iata $iata = null;
 
     /**
@@ -31,11 +22,6 @@ class Cart implements RedeSerializable
      */
     private array $shipping = [];
 
-    /**
-     * @param int $type
-     *
-     * @return Address
-     */
     public function address(int $type = Address::BOTH): Address
     {
         $address = new Address();
@@ -52,8 +38,6 @@ class Cart implements RedeSerializable
     }
 
     /**
-     * @param Item $item
-     *
      * @return $this
      */
     public function addItem(Item $item): static
@@ -64,8 +48,6 @@ class Cart implements RedeSerializable
     }
 
     /**
-     * @param Address $shippingAddress
-     *
      * @return $this
      */
     public function addShippingAddress(Address $shippingAddress): static
@@ -76,8 +58,6 @@ class Cart implements RedeSerializable
     }
 
     /**
-     * @param Address $shippingAddress
-     *
      * @return $this
      */
     public function setShippingAddress(Address $shippingAddress): static
@@ -88,8 +68,6 @@ class Cart implements RedeSerializable
     }
 
     /**
-     * @param Address $billingAddress
-     *
      * @return $this
      */
     public function setBillingAddress(Address $billingAddress): static
@@ -99,13 +77,6 @@ class Cart implements RedeSerializable
         return $this;
     }
 
-    /**
-     * @param string $name
-     * @param string $email
-     * @param string $cpf
-     *
-     * @return Consumer
-     */
     public function consumer(string $name, string $email, string $cpf): Consumer
     {
         $consumer = new Consumer($name, $email, $cpf);
@@ -116,20 +87,17 @@ class Cart implements RedeSerializable
     }
 
     /**
-     * @param Flight $flight
-     *
      * @return $this
      */
     public function setFlight(Flight $flight): static
     {
         $this->iata = new Iata();
         $this->iata->setFlight($flight);
+
         return $this;
     }
 
     /**
-     * @param Iata $iata
-     *
      * @return $this
      */
     public function setIata(Iata $iata): static
@@ -147,29 +115,20 @@ class Cart implements RedeSerializable
         return $this->shipping;
     }
 
-    /**
-     * @return Address|null
-     */
     public function getBilling(): ?Address
     {
         return $this->billing;
     }
 
-    /**
-     * @return Consumer|null
-     */
     public function getConsumer(): ?Consumer
     {
         return $this->consumer;
     }
 
-    /**
-     * @param Consumer $consumer
-     * @return Cart
-     */
     public function setConsumer(Consumer $consumer): Cart
     {
         $this->consumer = $consumer;
+
         return $this;
     }
 

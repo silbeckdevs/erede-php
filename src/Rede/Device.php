@@ -7,149 +7,119 @@ class Device implements RedeSerializable
     use CreateTrait;
     use SerializeTrait;
 
-    /**
-     * @param string|int|null $ColorDepth
-     * @param string|null     $DeviceType3ds
-     * @param bool|null       $JavaEnabled
-     * @param string          $Language
-     * @param int|null        $ScreenHeight
-     * @param int|null        $ScreenWidth
-     * @param int|null        $TimeZoneOffset
-     */
     public function __construct(
-        private string|int|null $ColorDepth = null,
-        private ?string $DeviceType3ds = null,
-        private ?bool $JavaEnabled = null,
-        private string $Language = 'BR',
-        private ?int $ScreenHeight = null,
-        private ?int $ScreenWidth = null,
-        private ?int $TimeZoneOffset = 3,
+        private string|int|null $colorDepth = null,
+        private ?string $deviceType3ds = null,
+        private ?bool $javaEnabled = null,
+        private string $language = 'BR',
+        private ?int $screenHeight = null,
+        private ?int $screenWidth = null,
+        private ?int $timeZoneOffset = 3,
     ) {
     }
 
-    /**
-     * @return string|null
-     */
-    public function getColorDepth(): ?string
+    public function getColorDepth(): string|int|null
     {
-        return $this->ColorDepth;
+        return $this->colorDepth;
     }
 
     /**
-     * @param string $ColorDepth
      * @return $this
      */
-    public function setColorDepth(string $ColorDepth): static
+    public function setColorDepth(string $colorDepth): static
     {
-        $this->ColorDepth = $ColorDepth;
+        $this->colorDepth = $colorDepth;
+
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDeviceType3ds(): ?string
     {
-        return $this->DeviceType3ds;
+        return $this->deviceType3ds;
     }
 
     /**
-     * @param string $DeviceType3ds
      * @return $this
      */
-    public function setDeviceType3ds(string $DeviceType3ds): static
+    public function setDeviceType3ds(string $deviceType3ds): static
     {
-        $this->DeviceType3ds = $DeviceType3ds;
+        $this->deviceType3ds = $deviceType3ds;
+
         return $this;
     }
 
-    /**
-     * @return bool|null
-     */
     public function getJavaEnabled(): ?bool
     {
-        return $this->JavaEnabled;
+        return $this->javaEnabled;
     }
 
     /**
-     * @param bool $JavaEnabled
      * @return $this
      */
     public function setJavaEnabled(bool $JavaEnabled = true): static
     {
-        $this->JavaEnabled = $JavaEnabled;
+        $this->javaEnabled = $JavaEnabled;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLanguage(): string
     {
-        return $this->Language;
+        return $this->language;
     }
 
     /**
-     * @param string $Language
      * @return $this
      */
-    public function setLanguage(string $Language): static
+    public function setLanguage(string $language): static
     {
-        $this->Language = $Language;
+        $this->language = $language;
+
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getScreenHeight(): ?int
     {
-        return $this->ScreenHeight;
+        return $this->screenHeight;
     }
 
     /**
-     * @param int $ScreenHeight
      * @return $this
      */
-    public function setScreenHeight(int $ScreenHeight): static
+    public function setScreenHeight(int $screenHeight): static
     {
-        $this->ScreenHeight = $ScreenHeight;
+        $this->screenHeight = $screenHeight;
+
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getScreenWidth(): ?int
     {
-        return $this->ScreenWidth;
+        return $this->screenWidth;
     }
 
     /**
-     * @param int $ScreenWidth
      * @return $this
      */
-    public function setScreenWidth(int $ScreenWidth): static
+    public function setScreenWidth(int $screenWidth): static
     {
-        $this->ScreenWidth = $ScreenWidth;
+        $this->screenWidth = $screenWidth;
+
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getTimeZoneOffset(): ?int
     {
-        return $this->TimeZoneOffset;
+        return $this->timeZoneOffset;
     }
 
     /**
-     * @param int $TimeZoneOffset
      * @return $this
      */
-    public function setTimeZoneOffset(int $TimeZoneOffset): static
+    public function setTimeZoneOffset(int $timeZoneOffset): static
     {
-        $this->TimeZoneOffset = $TimeZoneOffset;
+        $this->timeZoneOffset = $timeZoneOffset;
+
         return $this;
     }
 }

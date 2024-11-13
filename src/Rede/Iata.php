@@ -2,20 +2,12 @@
 
 namespace Rede;
 
-use ArrayIterator;
-
 class Iata implements RedeSerializable
 {
     use SerializeTrait;
 
-    /**
-     * @var string|null
-     */
     private ?string $code = null;
 
-    /**
-     * @var string|null
-     */
     private ?string $departureTax = null;
 
     /**
@@ -23,55 +15,45 @@ class Iata implements RedeSerializable
      */
     private array $flight = [];
 
-    /**
-     * @return string|null
-     */
     public function getCode(): ?string
     {
         return $this->code;
     }
 
     /**
-     * @param string $code
-     *
      * @return $this
      */
     public function setCode(string $code): static
     {
         $this->code = $code;
+
         return $this;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDepartureTax(): ?string
     {
         return $this->departureTax;
     }
 
     /**
-     * @param string $departureTax
-     *
      * @return $this
      */
     public function setDepartureTax(string $departureTax): static
     {
         $this->departureTax = $departureTax;
+
         return $this;
     }
 
     /**
-     * @return ArrayIterator<int,Flight>
+     * @return \ArrayIterator<int,Flight>
      */
-    public function getFlightIterator(): ArrayIterator
+    public function getFlightIterator(): \ArrayIterator
     {
-        return new ArrayIterator($this->flight);
+        return new \ArrayIterator($this->flight);
     }
 
     /**
-     * @param Flight $flight
-     *
      * @return $this
      */
     public function setFlight(Flight $flight): static
@@ -83,8 +65,6 @@ class Iata implements RedeSerializable
     }
 
     /**
-     * @param Flight $flight
-     *
      * @return $this
      */
     public function addFlight(Flight $flight): static

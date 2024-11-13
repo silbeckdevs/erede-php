@@ -2,33 +2,26 @@
 
 namespace Rede;
 
-use DateTime;
-use Exception;
-
 trait CreateTrait
 {
     /**
-     * @param object $data
-     *
-     * @return object
-     * @throws Exception
+     * @throws \Exception
      */
-    public static function create(object $data): object
+    public function populate(object $body): static
     {
-        $object = new self();
-        $dataKeys = get_object_vars($data);
-        $objectKeys = get_object_vars($object);
+        $bodyKeys = get_object_vars($body);
+        $dateTimeProps = ['requestDateTime', 'dateTime', 'refundDateTime', 'dateTimeExpiration', 'expirationQrCode'];
 
-        foreach ($dataKeys as $property => $value) {
-            if (array_key_exists($property, $objectKeys)) {
-                if ($property == 'requestDateTime' || $property == 'dateTime' || $property == 'refundDateTime') {
-                    $value = new DateTime($value);
+        foreach ($bodyKeys as $property => $value) {
+            if (property_exists($this, $property) && null !== $value) {
+                if (in_array($property, $dateTimeProps) && is_string($value)) {
+                    $value = new \DateTime($value);
                 }
 
-                $object->{$property} = $value;
+                $this->{$property} = $value;
             }
         }
 
-        return $object;
+        return $this;
     }
 }

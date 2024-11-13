@@ -1,0 +1,58 @@
+name: Run lint and tests
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - ready_for_review
+  workflow_dispatch:
+
+env:
+  PHP_VERSION: 8.3
+  PHP_EXTENSIONS: mbstring
+  PHP_TOOLS: composer:v2, phpunit:11
+  REDE_PV: ${{ secrets.REDE_PV }}
+  REDE_TOKEN: ${{ secrets.REDE_TOKEN }}
+  REDE_DEBUG: ${{ vars.REDE_DEBUG }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  run-tests:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: none
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: ${{ env.PHP_EXTENSIONS }}
+          tools: ${{ env.PHP_TOOLS }}
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer update --no-interaction --no-progress
+
+      - name: Static analysis
+        run: composer phpstan
+
+      - name: PHP Coding Standards Fixer
+        run: composer format:check
+
+      - name: Run PHPUnit
+        run: composer phpunit
