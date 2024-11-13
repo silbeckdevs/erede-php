@@ -22,13 +22,13 @@ class QrCode implements RedeSerializable
 
     private ?string $returnMessage = null;
 
-    private string|int|null $affiliation;
+    private string|int|null $affiliation = null;
 
     private ?string $kind = null;
 
     private ?string $reference = null;
 
-    private string|int|null $amount;
+    private string|int|null $amount = null;
 
     private ?string $tid = null;
 

@@ -44,6 +44,16 @@ Alternativamente, você pode executar diretamente em seu terminal:
 composer require "developersrede/erede-php"
 ```
 
+## Comandos
+
+- Rodar todos os testes e PHPStan `composer test`
+- Rodar todos os testes `composer phpunit`
+- Testes unitários `composer test:unit`
+- Testes integração `composer test:e2e`
+- PHPStan `composer phpstan`
+- PHP-CS-Fixer verify `composer format:check`
+- PHP-CS-Fixer fix `composer format:fix`
+
 ## Testes
 
 O SDK utiliza PHPUnit com TestDox para os testes. Para executá-los em ambiente local, você precisa exportar
@@ -335,13 +345,13 @@ $transaction = (new Transaction(25, 'pedido' . time()))->debitCard(
 // Configura o 3dSecure para autenticação
 $transaction->threeDSecure(
     new Device(
-        ColorDepth: 1,
-        DeviceType3ds: 'BROWSER',
-        JavaEnabled: false,
-        Language: 'BR',
-        ScreenHeight: 500,
-        ScreenWidth: 500,
-        TimeZoneOffset: 3
+        colorDepth: 1,
+        deviceType3ds: 'BROWSER',
+        javaEnabled: false,
+        language: 'BR',
+        screenHeight: 500,
+        screenWidth: 500,
+        timeZoneOffset: 3
     )
 );
 $transaction->addUrl('https://redirecturl.com/3ds/success', Url::THREE_D_SECURE_SUCCESS);

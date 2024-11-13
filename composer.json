@@ -40,7 +40,8 @@
       "@phpstan",
       "@phpunit"
     ],
-    "test:unit": "phpunit tests/Rede/Unit --configuration phpunit.xml --testdox",
+    "test:unit": "phpunit tests/Unit --configuration phpunit.xml --testdox",
+    "test:e2e": "phpunit tests/E2E --configuration phpunit.xml --testdox",
     "test:coverage": "phpunit --configuration phpunit.xml --coverage-clover build/logs/clover.xml --coverage-html build/coverage",
     "post-install-cmd": "cghooks add --ignore-lock",
     "post-update-cmd": "cghooks update"
