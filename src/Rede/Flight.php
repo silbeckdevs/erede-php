@@ -15,60 +15,48 @@ class Flight implements RedeSerializable
     {
     }
 
-    /**
-     * @return string
-     */
     public function getDate(): string
     {
         return $this->date;
     }
 
     /**
-     * @param string $date
-     *
      * @return $this
      */
     public function setDate(string $date): static
     {
         $this->date = $date;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFrom(): string
     {
         return $this->from;
     }
 
     /**
-     * @param string $from
-     *
      * @return $this
      */
     public function setFrom(string $from): static
     {
         $this->from = $from;
+
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getNumber(): string
     {
         return $this->number;
     }
 
     /**
-     * @param string $number
-     *
      * @return $this
      */
     public function setNumber(string $number): static
     {
         $this->number = $number;
+
         return $this;
     }
 
@@ -81,20 +69,17 @@ class Flight implements RedeSerializable
     }
 
     /**
-     * @param Passenger $passenger
-     *
      * @return $this
      */
     public function setPassenger(Passenger $passenger): static
     {
         $this->passenger = [];
         $this->addPassenger($passenger);
+
         return $this;
     }
 
     /**
-     * @param Passenger $passenger
-     *
      * @return $this
      */
     public function addPassenger(Passenger $passenger): static
@@ -104,22 +89,18 @@ class Flight implements RedeSerializable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTo(): string
     {
         return $this->to;
     }
 
     /**
-     * @param string $to
-     *
      * @return $this
      */
     public function setTo(string $to): static
     {
         $this->to = $to;
+
         return $this;
     }
 }

@@ -2,45 +2,32 @@
 
 namespace Rede\Service;
 
-use CurlHandle;
-use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Rede\eRede;
 use Rede\Exception\RedeException;
 use Rede\Store;
 use Rede\Transaction;
-use RuntimeException;
 
 abstract class AbstractService
 {
     public const GET = 'GET';
+
     public const POST = 'POST';
+
     public const PUT = 'PUT';
 
-    /**
-     * @var string|null
-     */
     private ?string $platform = null;
 
-    /**
-     * @var string|null
-     */
     private ?string $platformVersion = null;
 
     /**
      * AbstractService constructor.
-     *
-     * @param Store                $store
-     * @param LoggerInterface|null $logger
      */
     public function __construct(protected Store $store, protected ?LoggerInterface $logger = null)
     {
     }
 
     /**
-     * @param string|null $platform
-     * @param string|null $platformVersion
-     *
      * @return $this
      */
     public function platform(?string $platform, ?string $platformVersion): static
@@ -52,19 +39,14 @@ abstract class AbstractService
     }
 
     /**
-     * @return Transaction
-     * @throws InvalidArgumentException
-     * @throws RuntimeException
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      * @throws RedeException
      */
     abstract public function execute(): Transaction;
 
     /**
-     * @param string $body
-     * @param string $method
-     *
-     * @return Transaction
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
     protected function sendRequest(string $body = '', string $method = 'GET'): Transaction
     {
@@ -76,13 +58,13 @@ abstract class AbstractService
                 $userAgent
             ),
             'Accept: application/json',
-            'Transaction-Response: brand-return-opened'
+            'Transaction-Response: brand-return-opened',
         ];
 
         $curl = curl_init($this->store->getEnvironment()->getEndpoint($this->getService()));
 
-        if (!$curl instanceof CurlHandle) {
-            throw new RuntimeException('Was not possible to create a curl instance.');
+        if (!$curl instanceof \CurlHandle) {
+            throw new \RuntimeException('Was not possible to create a curl instance.');
         }
 
         curl_setopt(
@@ -104,7 +86,7 @@ abstract class AbstractService
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
         }
 
-        if ($body !== '') {
+        if ('' !== $body) {
             curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
 
             $headers[] = 'Content-Type: application/json; charset=utf8';
@@ -141,11 +123,11 @@ abstract class AbstractService
         $this->dumpHttpInfo($httpInfo);
 
         if (curl_errno($curl)) {
-            throw new RuntimeException(sprintf('Curl error[%s]: %s', curl_errno($curl), curl_error($curl)));
+            throw new \RuntimeException(sprintf('Curl error[%s]: %s', curl_errno($curl), curl_error($curl)));
         }
 
         if (!is_string($response)) {
-            throw new RuntimeException('Error obtaining a response from the API');
+            throw new \RuntimeException('Error obtaining a response from the API');
         }
 
         curl_close($curl);
@@ -155,8 +137,6 @@ abstract class AbstractService
 
     /**
      * Gets the User-Agent string.
-     *
-     * @return string
      */
     private function getUserAgent(): string
     {
@@ -195,10 +175,10 @@ abstract class AbstractService
     abstract protected function getService(): string;
 
     /**
-     * Dumps the httpInfo log
+     * Dumps the httpInfo log.
      *
-     * @param array<mixed> $httpInfo The http info.
-     * @return void
+     * @param array<mixed> $httpInfo the http info
+     *
      * @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection
      */
     private function dumpHttpInfo(array $httpInfo): void
@@ -219,8 +199,6 @@ abstract class AbstractService
     /**
      * @param string $response   Parses the HTTP response from Rede
      * @param int    $statusCode The HTTP status code
-     *
-     * @return Transaction
      */
     abstract protected function parseResponse(string $response, int $statusCode): Transaction;
 }

@@ -10,7 +10,7 @@ trait SerializeTrait
     public function jsonSerialize(): array
     {
         return array_filter(get_object_vars($this), function ($value) {
-            return $value !== null;
+            return null !== $value;
         });
     }
 }
