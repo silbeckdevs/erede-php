@@ -12,6 +12,12 @@ class Brand
 
     private ?string $returnMessage = null;
 
+    private ?string $merchantAdviceCode = null;
+
+    private ?string $authorizationCode = null;
+
+    private ?string $brandTid = null;
+
     public function getName(): ?string
     {
         return $this->name;
@@ -44,6 +50,42 @@ class Brand
     public function setReturnMessage(?string $returnMessage): Brand
     {
         $this->returnMessage = $returnMessage;
+
+        return $this;
+    }
+
+    public function getMerchantAdviceCode(): ?string
+    {
+        return $this->merchantAdviceCode;
+    }
+
+    public function setMerchantAdviceCode(?string $merchantAdviceCode): Brand
+    {
+        $this->merchantAdviceCode = $merchantAdviceCode;
+
+        return $this;
+    }
+
+    public function getAuthorizationCode(): ?string
+    {
+        return $this->authorizationCode;
+    }
+
+    public function setAuthorizationCode(?string $authorizationCode): Brand
+    {
+        $this->authorizationCode = $authorizationCode;
+
+        return $this;
+    }
+
+    public function getBrandTid(): ?string
+    {
+        return $this->brandTid;
+    }
+
+    public function setBrandTid(?string $brandTid): Brand
+    {
+        $this->brandTid = $brandTid;
 
         return $this;
     }
