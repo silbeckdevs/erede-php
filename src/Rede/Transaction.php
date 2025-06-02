@@ -4,6 +4,8 @@ namespace Rede;
 
 class Transaction implements RedeSerializable, RedeUnserializable
 {
+    use ResponseTrait;
+
     public const CREDIT = 'credit';
 
     public const DEBIT = 'debit';
@@ -733,7 +735,8 @@ class Transaction implements RedeSerializable, RedeUnserializable
         }
 
         foreach (get_object_vars($properties) as $property => $value) {
-            if ('links' == $property) {
+            // TODO verify why use urls in request and not use links in response
+            if ('links' === $property) {
                 continue;
             }
 

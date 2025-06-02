@@ -78,6 +78,7 @@ abstract class AbstractTransactionsService extends AbstractService
         }
 
         try {
+            $this->transaction->setHttpResponse(new \Rede\Http\RedeResponse($statusCode, $response));
             $this->transaction->jsonUnserialize($response);
         } catch (\InvalidArgumentException $e) {
             $previous = $e;

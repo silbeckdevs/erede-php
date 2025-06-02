@@ -18,7 +18,7 @@ Este SDK possui as seguintes funcionalidades:
 
 ## Dependências
 
-- PHP >= 8.1
+- PHP >= 8.2
 
 ## Instalando o SDK
 
@@ -380,3 +380,9 @@ if ($transaction->getReturnCode() == '00') {
     );
 }
 ```
+
+## Observações
+
+- Ao criar uma transação com `$transaction = (new eRede($store))->create($transaction)` não vai retornar o campo `authorization`, para retornar o campo é preciso fazer uma consulta `$transaction = (new eRede($store))->get('TID123')`
+- O campo `$transaction->getAuthorizationCode()` não está retornando nada, use `$transaction->getBrand()?->getAuthorizationCode()` ou `$transaction->getAuthorization()?->getBrand()?->getAuthorizationCode()`
+- Caso precise acessar o JSON original do response utilize `$transaction?->getHttpResponse()->getBody()`

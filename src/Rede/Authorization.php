@@ -40,6 +40,17 @@ class Authorization
 
     private ?string $tid = null;
 
+    private ?Brand $brand = null;
+
+    /**
+     * @return array<string, class-string>
+     */
+    protected function getObjectMapping(): array
+    {
+        return ['brand' => Brand::class];
+    }
+
+    // gets and sets
     public function getAffiliation(): ?string
     {
         return $this->affiliation;
@@ -291,6 +302,21 @@ class Authorization
     public function setTid(?string $tid): static
     {
         $this->tid = $tid;
+
+        return $this;
+    }
+
+    public function getBrand(): ?Brand
+    {
+        return $this->brand;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setBrand(Brand $brand): static
+    {
+        $this->brand = $brand;
 
         return $this;
     }
