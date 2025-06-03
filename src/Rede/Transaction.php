@@ -736,7 +736,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
 
         foreach (get_object_vars($properties) as $property => $value) {
             // TODO verify why use urls in request and not use links in response
-            if ('links' === $property) {
+            if ('links' === $property || null === $value) {
                 continue;
             }
 
@@ -852,5 +852,13 @@ class Transaction implements RedeSerializable, RedeUnserializable
         if (('qrCodeResponse' === $property) && is_object($value)) {
             $this->qrCode = (new QrCode())->populate($value);
         }
+    }
+
+    public function getFirstAuthorizationCode(): ?string
+    {
+        return $this->getAuthorizationCode()
+            ?: $this->getBrand()?->getAuthorizationCode()
+            ?: $this->getAuthorization()?->getAuthorizationCode()
+            ?: $this->getAuthorization()?->getBrand()?->getAuthorizationCode();
     }
 }

@@ -63,6 +63,56 @@ class TransactionUnitTest extends BaseTestCase
         $this->assertSame('306718396', $transaction->getCapture()->getNsu());
     }
 
+    public function testGetAuthorizationCodeValid(): void
+    {
+        // Cenário 1: AuthorizationCode diretamente na transação
+        $transaction = (new Transaction())->jsonUnserialize($this->serializeJsonTransaction([
+            'authorizationCode' => '111111',
+        ]));
+        $this->assertSame('111111', $transaction->getFirstAuthorizationCode());
+
+        // Cenário 2: AuthorizationCode no Brand
+        $transaction = (new Transaction())->jsonUnserialize($this->serializeJsonTransaction([
+            'authorizationCode' => null,
+            'brand' => [
+                'authorizationCode' => '222222',
+            ],
+        ]));
+        $this->assertSame('222222', $transaction->getFirstAuthorizationCode());
+
+        // Cenário 3: AuthorizationCode no Authorization
+        $transaction = (new Transaction())->jsonUnserialize($this->serializeJsonTransaction([
+            'brand' => null,
+            'authorization' => [
+                'authorizationCode' => '333333',
+            ],
+        ]));
+        $this->assertSame('333333', $transaction->getFirstAuthorizationCode());
+
+        // Cenário 4: AuthorizationCode no Brand dentro do Authorization
+        $transaction = (new Transaction())->jsonUnserialize($this->serializeJsonTransaction([
+            'authorization' => [
+                'brand' => [
+                    'authorizationCode' => '444444',
+                ],
+            ],
+        ]));
+        $this->assertSame('444444', $transaction->getFirstAuthorizationCode());
+
+        // Cenário 5: Nenhum código de autorização disponível
+        $transaction = (new Transaction())->jsonUnserialize($this->serializeJsonTransaction([
+            'authorization' => null,
+            'brand' => null,
+            'authorizationCode' => null,
+        ]));
+        $this->assertNull($transaction->getFirstAuthorizationCode());
+    }
+
+    private function serializeJsonTransaction(mixed $body): string
+    {
+        return json_encode($body) ?: '{}';
+    }
+
     private function getJsonTransactionMock(): string
     {
         return '
