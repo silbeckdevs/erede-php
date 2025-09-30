@@ -1,0 +1,11 @@
+/dist/
+build/
+/logs/
+/log/
+/cache/
+/.git/
+/vendor/
+/node_modules/
+tests/config/env.test.php
+tmp/
+error_log
