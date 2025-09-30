@@ -6,22 +6,22 @@ class Environment implements RedeSerializable
 {
     public const PRODUCTION = 'https://api.userede.com.br/erede';
 
-    public const SANDBOX = 'https://api.userede.com.br/desenvolvedores';
+    public const SANDBOX = 'https://sandbox-erede.useredecloud.com.br';
 
-    public const VERSION = 'v1';
+    public const VERSION = 'v2';
 
     private ?string $ip = null;
 
     private ?string $sessionId = null;
 
-    private string $endpoint;
+    private string $baseUrl;
 
     /**
      * Creates an environment with its base url and version.
      */
-    private function __construct(string $baseUrl)
+    private function __construct(string $baseUrl = self::PRODUCTION)
     {
-        $this->endpoint = sprintf('%s/%s/', $baseUrl, Environment::VERSION);
+        $this->baseUrl = sprintf('%s/%s/', $baseUrl, Environment::VERSION);
     }
 
     /**
@@ -40,12 +40,27 @@ class Environment implements RedeSerializable
         return new Environment(Environment::SANDBOX);
     }
 
+    public function isProduction(): bool
+    {
+        return str_starts_with($this->baseUrl, self::PRODUCTION);
+    }
+
+    public function getBaseUrl(): string
+    {
+        return $this->baseUrl;
+    }
+
+    public function getBaseUrlOAuth(): string
+    {
+        return $this->isProduction() ? 'https://api.userede.com.br' : 'https://rl7-sandbox-api.useredecloud.com.br';
+    }
+
     /**
      * @return string Gets the environment endpoint
      */
     public function getEndpoint(string $service): string
     {
-        return $this->endpoint . $service;
+        return $this->baseUrl . $service;
     }
 
     public function getIp(): ?string

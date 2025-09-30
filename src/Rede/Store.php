@@ -4,18 +4,22 @@ namespace Rede;
 
 class Store
 {
-    /**
-     * Which environment will this store used for?
-     */
     private Environment $environment;
+
+    private ?AccessToken $accessToken = null;
 
     /**
      * Creates a store.
      *
+     * @param string           $filiation   ClientId para autenticação OAuth 2.0
+     * @param string           $token       ClientSecret para autenticação OAuth 2.0
      * @param Environment|null $environment if none provided, production will be used
      */
-    public function __construct(private string $filiation, private string $token, ?Environment $environment = null)
-    {
+    public function __construct(
+        private string $filiation,
+        private string $token,
+        ?Environment $environment = null,
+    ) {
         $this->environment = $environment ?? Environment::production();
     }
 
@@ -60,6 +64,18 @@ class Store
     public function setToken(string $token): static
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getAccessToken(): ?AccessToken
+    {
+        return $this->accessToken;
+    }
+
+    public function setAccessToken(?AccessToken $accessToken): static
+    {
+        $this->accessToken = $accessToken;
 
         return $this;
     }

@@ -7,6 +7,7 @@ use Rede\Service\CancelTransactionService;
 use Rede\Service\CaptureTransactionService;
 use Rede\Service\CreateTransactionService;
 use Rede\Service\GetTransactionService;
+use Rede\Service\OAuthService;
 
 /**
  * phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps.
@@ -26,6 +27,16 @@ class eRede
      */
     public function __construct(private readonly Store $store, private readonly ?LoggerInterface $logger = null)
     {
+        //  TODO  test isValid
+        if (empty($this->store->getAccessToken()) || !$this->store->getAccessToken()->isValid()) {
+            $oAuthService = new OAuthService($this->store, $this->logger);
+            $this->store->setAccessToken($oAuthService->generateAccessToken());
+        }
+    }
+
+    public function getAccessToken(): ?AccessToken
+    {
+        return $this->store->getAccessToken();
     }
 
     /**

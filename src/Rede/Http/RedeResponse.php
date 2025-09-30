@@ -17,4 +17,9 @@ class RedeResponse
     {
         return $this->body;
     }
+
+    public function isSuccess(): bool
+    {
+        return $this->statusCode >= 200 && $this->statusCode < 300;
+    }
 }

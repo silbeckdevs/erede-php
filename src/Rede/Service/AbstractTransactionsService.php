@@ -69,7 +69,7 @@ abstract class AbstractTransactionsService extends AbstractService
      *
      * @see    AbstractService::parseResponse()
      */
-    protected function parseResponse(string $response, int $statusCode): Transaction
+    protected function parseResponse(\Rede\Http\RedeResponse $httpResponse): Transaction
     {
         $previous = null;
 
@@ -78,13 +78,13 @@ abstract class AbstractTransactionsService extends AbstractService
         }
 
         try {
-            $this->transaction->setHttpResponse(new \Rede\Http\RedeResponse($statusCode, $response));
-            $this->transaction->jsonUnserialize($response);
+            $this->transaction->setHttpResponse($httpResponse);
+            $this->transaction->jsonUnserialize($httpResponse->getBody());
         } catch (\InvalidArgumentException $e) {
             $previous = $e;
         }
 
-        if ($statusCode >= 400) {
+        if ($httpResponse->getStatusCode() >= 400) {
             throw new RedeException($this->transaction->getReturnMessage() ?? 'Error on getting the content from the API', (int) $this->transaction->getReturnCode(), $previous);
         }
 

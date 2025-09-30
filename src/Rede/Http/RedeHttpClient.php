@@ -44,8 +44,6 @@ abstract class RedeHttpClient
      * @param string|array<string|int,mixed>|object $body
      * @param array<string|int, string>             $headers
      *
-     * @return array{string, int}
-     *
      * @throws \RuntimeException
      */
     protected function request(
@@ -54,27 +52,20 @@ abstract class RedeHttpClient
         string|array|object $body = '',
         array $headers = [],
         string $contentType = self::CONTENT_TYPE_JSON,
-    ): array {
+    ): RedeResponse {
         $curl = curl_init($url);
 
         if (!$curl instanceof \CurlHandle) {
             throw new \RuntimeException('Was not possible to create a curl instance.');
         }
 
-        // TODO replace with OAuth 2.0
-        curl_setopt(
-            $curl,
-            CURLOPT_USERPWD,
-            sprintf('%s:%s', $this->store->getFiliation(), $this->store->getToken())
-        );
-
         curl_setopt($curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
 
         switch ($method) {
-            case 'GET':
+            case self::GET:
                 break;
-            case 'POST':
+            case self::POST:
                 curl_setopt($curl, CURLOPT_POST, true);
                 break;
             default:
@@ -86,6 +77,10 @@ abstract class RedeHttpClient
             'Accept: application/json',
             'Transaction-Response: brand-return-opened',
         ];
+
+        if ($this->store->getAccessToken()) {
+            $requestHeaders[] = 'Authorization: Bearer ' . $this->store->getAccessToken()->getAccessToken();
+        }
 
         $parsedBody = $this->parseBody($body, $contentType);
         if (!empty($body)) {
@@ -144,7 +139,7 @@ abstract class RedeHttpClient
 
         curl_close($curl);
 
-        return [$response, $httpInfo['http_code']];
+        return new RedeResponse($httpInfo['http_code'], $response);
     }
 
     private function parseBody(mixed $body, string $contentType): string

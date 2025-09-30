@@ -27,23 +27,10 @@ abstract class AbstractService extends RedeHttpClient
      */
     protected function sendRequest(string $body = '', string $method = 'GET'): Transaction
     {
-        // TODO Obtém o access token via OAuth 2.0
-        // $accessToken = $this->store->getOAuth()->getAccessToken();
-        // $headers[] = 'Authorization: Bearer ' . $accessToken;
-
-        [$response, $statusCode] = $this->request($method, $this->store->getEnvironment()->getEndpoint($this->getService()), $body);
-
-        return $this->parseResponse($response, $statusCode);
+        return $this->parseResponse($this->request($method, $this->store->getEnvironment()->getEndpoint($this->getService()), $body));
     }
 
-    /**
-     * @return string Gets the service that will be used on the request
-     */
     abstract protected function getService(): string;
 
-    /**
-     * @param string $response   Parses the HTTP response from Rede
-     * @param int    $statusCode The HTTP status code
-     */
-    abstract protected function parseResponse(string $response, int $statusCode): Transaction;
+    abstract protected function parseResponse(\Rede\Http\RedeResponse $httpResponse): Transaction;
 }
