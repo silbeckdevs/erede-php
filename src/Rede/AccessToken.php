@@ -7,15 +7,14 @@ class AccessToken
     use SerializeTrait;
     use CreateTrait;
 
-    private ?string $token_type = null;
-
-    private ?string $access_token = null;
-
-    private ?int $expires_in = null;
-
-    private ?string $scope = null;
-
-    private ?int $expires_at = null;
+    public function __construct(
+        private ?string $access_token = null,
+        private ?int $expires_in = null,
+        private ?int $expires_at = null,
+        private ?string $token_type = null,
+        private ?string $scope = null,
+    ) {
+    }
 
     public function isValid(): bool
     {

@@ -16,8 +16,8 @@ class Store
      * @param Environment|null $environment if none provided, production will be used
      */
     public function __construct(
-        private string $filiation,
-        private string $token,
+        private string $filiation, // TODO rename to clientId
+        private string $token, // TODO rename to clientSecret
         ?Environment $environment = null,
     ) {
         $this->environment = $environment ?? Environment::production();

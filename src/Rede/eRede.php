@@ -9,12 +9,9 @@ use Rede\Service\CreateTransactionService;
 use Rede\Service\GetTransactionService;
 use Rede\Service\OAuthService;
 
-/**
- * phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps.
- */
 class eRede
 {
-    public const VERSION = '6.1.0';
+    public const VERSION = '7.0.0';
 
     public const USER_AGENT = 'eRede/' . eRede::VERSION . ' (PHP %s; Store %s; %s %s) %s';
 
