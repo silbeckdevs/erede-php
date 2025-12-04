@@ -24,16 +24,15 @@ class eRede
      */
     public function __construct(private readonly Store $store, private readonly ?LoggerInterface $logger = null)
     {
-        //  TODO  test isValid
-        if (empty($this->store->getAccessToken()) || !$this->store->getAccessToken()->isValid()) {
+        if (empty($this->store->getOAuthToken()) || !$this->store->getOAuthToken()->isValid()) {
             $oAuthService = new OAuthService($this->store, $this->logger);
-            $this->store->setAccessToken($oAuthService->generateAccessToken());
+            $this->store->setOAuthToken($oAuthService->generateToken());
         }
     }
 
-    public function getAccessToken(): ?AccessToken
+    public function getOAuthToken(): ?OAuthToken
     {
-        return $this->store->getAccessToken();
+        return $this->store->getOAuthToken();
     }
 
     /**

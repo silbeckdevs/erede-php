@@ -6,7 +6,7 @@ class Store
 {
     private Environment $environment;
 
-    private ?AccessToken $accessToken = null;
+    private ?OAuthToken $oauthToken = null;
 
     /**
      * Creates a store.
@@ -68,14 +68,14 @@ class Store
         return $this;
     }
 
-    public function getAccessToken(): ?AccessToken
+    public function getOAuthToken(): ?OAuthToken
     {
-        return $this->accessToken;
+        return $this->oauthToken;
     }
 
-    public function setAccessToken(?AccessToken $accessToken): static
+    public function setOAuthToken(?OAuthToken $oauthToken): static
     {
-        $this->accessToken = $accessToken;
+        $this->oauthToken = $oauthToken;
 
         return $this;
     }

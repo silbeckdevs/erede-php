@@ -2,7 +2,7 @@
 
 namespace Rede;
 
-class AccessToken
+class OAuthToken
 {
     use SerializeTrait;
     use CreateTrait;

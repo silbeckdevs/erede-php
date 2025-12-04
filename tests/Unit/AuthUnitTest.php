@@ -2,9 +2,9 @@
 
 namespace Rede\Tests\Unit;
 
-use Rede\AccessToken;
 use Rede\Environment;
 use Rede\eRede;
+use Rede\OAuthToken;
 use Rede\Store;
 use Rede\Tests\BaseTestCase;
 
@@ -12,37 +12,37 @@ class AuthUnitTest extends BaseTestCase
 {
     public function testAccessTokenAllFeatures(): void
     {
-        $accessToken = (new AccessToken())
+        $oauthToken = (new OAuthToken())
             ->setTokenType('Bearer')
             ->setAccessToken('fluent_token_xyz')
             ->setExpiresIn(7200)
             ->setScope('admin')
             ->setExpiresAt(time() + 7200);
 
-        $this->assertSame('Bearer', $accessToken->getTokenType());
-        $this->assertSame('fluent_token_xyz', $accessToken->getAccessToken());
-        $this->assertSame(7200, $accessToken->getExpiresIn());
-        $this->assertSame('admin', $accessToken->getScope());
-        $this->assertNotNull($accessToken->getExpiresAt());
+        $this->assertSame('Bearer', $oauthToken->getTokenType());
+        $this->assertSame('fluent_token_xyz', $oauthToken->getAccessToken());
+        $this->assertSame(7200, $oauthToken->getExpiresIn());
+        $this->assertSame('admin', $oauthToken->getScope());
+        $this->assertNotNull($oauthToken->getExpiresAt());
 
-        $emptyToken = new AccessToken();
+        $emptyToken = new OAuthToken();
         $this->assertFalse($emptyToken->isValid());
 
-        $validTokenNoExpiry = (new AccessToken())
+        $validTokenNoExpiry = (new OAuthToken())
             ->setAccessToken('valid_token_no_expiry');
         $this->assertTrue($validTokenNoExpiry->isValid());
 
-        $validToken = (new AccessToken())
+        $validToken = (new OAuthToken())
             ->setAccessToken('valid_token_with_expiry')
             ->setExpiresAt(time() + 1800); // expira em 30 minutos
         $this->assertTrue($validToken->isValid());
 
-        $expiredToken = (new AccessToken())
+        $expiredToken = (new OAuthToken())
             ->setAccessToken('expired_token')
             ->setExpiresAt(time() - 100); // expirou há 100 segundos
         $this->assertFalse($expiredToken->isValid());
 
-        $expiringNowToken = (new AccessToken())
+        $expiringNowToken = (new OAuthToken())
             ->setAccessToken('expiring_now_token')
             ->setExpiresAt(time()); // expira agora
         $this->assertFalse($expiringNowToken->isValid());
@@ -54,7 +54,7 @@ class AuthUnitTest extends BaseTestCase
             'scope' => 'full_access',
         ];
 
-        $populatedToken = (new AccessToken())->populate($jsonData);
+        $populatedToken = (new OAuthToken())->populate($jsonData);
         $this->assertSame('Bearer', $populatedToken->getTokenType());
         $this->assertSame('populated_token_abc', $populatedToken->getAccessToken());
         $this->assertSame(3600, $populatedToken->getExpiresIn());
@@ -67,13 +67,13 @@ class AuthUnitTest extends BaseTestCase
             'scope' => null,
         ];
 
-        $partialToken = (new AccessToken())->populate($partialJsonData);
+        $partialToken = (new OAuthToken())->populate($partialJsonData);
         $this->assertSame('Bearer', $partialToken->getTokenType());
         $this->assertSame('partial_token', $partialToken->getAccessToken());
         $this->assertNull($partialToken->getExpiresIn());
         $this->assertNull($partialToken->getScope());
 
-        $tokenForArray = (new AccessToken())
+        $tokenForArray = (new OAuthToken())
             ->setTokenType('Bearer')
             ->setAccessToken('array_test_token')
             ->setExpiresIn(1800);
@@ -89,7 +89,7 @@ class AuthUnitTest extends BaseTestCase
         $this->assertSame('array_test_token', $array['access_token']);
         $this->assertSame(1800, $array['expires_in']);
 
-        $tokenForJson = (new AccessToken())
+        $tokenForJson = (new OAuthToken())
             ->setTokenType('Bearer')
             ->setAccessToken('json_test_token')
             ->setExpiresIn(3600)
@@ -109,7 +109,7 @@ class AuthUnitTest extends BaseTestCase
             'scope' => 'api_access payment_processing',
         ];
 
-        $realToken = (new AccessToken())->populate($oauthResponse);
+        $realToken = (new OAuthToken())->populate($oauthResponse);
         $realToken->setExpiresAt(time() + $realToken->getExpiresIn() - 60); // como no OAuthService
 
         $this->assertTrue($realToken->isValid());
@@ -120,7 +120,7 @@ class AuthUnitTest extends BaseTestCase
         $this->assertNotNull($realToken->getExpiresAt());
         $this->assertGreaterThan(time(), $realToken->getExpiresAt());
 
-        $resetToken = (new AccessToken())
+        $resetToken = (new OAuthToken())
             ->setTokenType('Bearer')
             ->setAccessToken('reset_test')
             ->setExpiresIn(3600)
@@ -141,31 +141,31 @@ class AuthUnitTest extends BaseTestCase
         $this->assertNull($resetToken->getExpiresAt());
         $this->assertFalse($resetToken->isValid());
 
-        $emptyStringToken = (new AccessToken())
+        $emptyStringToken = (new OAuthToken())
             ->setAccessToken('')
             ->setExpiresAt(time() + 3600);
         $this->assertFalse($emptyStringToken->isValid()); // string vazia deve ser inválida
 
-        $zeroExpiryToken = (new AccessToken())
+        $zeroExpiryToken = (new OAuthToken())
             ->setAccessToken('valid_token')
             ->setExpiresAt(0);
         $this->assertFalse($zeroExpiryToken->isValid()); // 0 está no passado
     }
 
-    public function testAccessTokenStore(): void
+    public function testOAuthTokenStore(): void
     {
         $store = new Store('1234567890', '1234567890');
-        $this->assertNull($store->getAccessToken());
+        $this->assertNull($store->getOAuthToken());
 
-        $token = (new AccessToken())->setAccessToken('test_token_123');
-        $store->setAccessToken($token);
+        $token = (new OAuthToken())->setAccessToken('test_token_123');
+        $store->setOAuthToken($token);
 
-        $this->assertNotNull($store->getAccessToken());
-        $this->assertSame('test_token_123', $store->getAccessToken()->getAccessToken());
-        $this->assertTrue($store->getAccessToken()->isValid());
+        $this->assertInstanceOf(OAuthToken::class, $store->getOAuthToken());
+        $this->assertSame('test_token_123', $store->getOAuthToken()->getAccessToken());
+        $this->assertTrue($store->getOAuthToken()->isValid());
 
         $eRedeService = new eRede($store);
-        $this->assertSame($token, $eRedeService->getAccessToken());
+        $this->assertSame($token, $eRedeService->getOAuthToken());
     }
 
     public function testEnvironmentAllFeatures(): void

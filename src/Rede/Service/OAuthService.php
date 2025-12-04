@@ -2,9 +2,9 @@
 
 namespace Rede\Service;
 
-use Rede\AccessToken;
 use Rede\Exception\RedeException;
 use Rede\Http\RedeHttpClient;
+use Rede\OAuthToken;
 
 class OAuthService extends RedeHttpClient
 {
@@ -14,9 +14,10 @@ class OAuthService extends RedeHttpClient
      * @throws RedeException
      * @throws \RuntimeException
      */
-    public function generateAccessToken(): AccessToken
+    public function generateToken(): OAuthToken
     {
-        $this->store->setAccessToken(null);
+        // prevent send auth token in request header
+        $this->store->setOAuthToken(null);
 
         $headers = [
             'Authorization: Basic ' . base64_encode($this->store->getFiliation() . ':' . $this->store->getToken()),
@@ -34,10 +35,10 @@ class OAuthService extends RedeHttpClient
             throw new RedeException('Failed to generate access token', $httpResponse->getStatusCode());
         }
 
-        $accessToken = (new AccessToken())->populate(json_decode($httpResponse->getBody()));
+        $oauthToken = (new OAuthToken())->populate(json_decode($httpResponse->getBody()));
         // -60 para garantir que o token ainda está válido
-        $accessToken->setExpiresAt(time() + $accessToken->getExpiresIn() - 60);
+        $oauthToken->setExpiresAt(time() + $oauthToken->getExpiresIn() - 60);
 
-        return $accessToken;
+        return $oauthToken;
     }
 }

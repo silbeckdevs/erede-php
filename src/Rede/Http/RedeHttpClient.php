@@ -22,16 +22,10 @@ abstract class RedeHttpClient
 
     private ?string $platformVersion = null;
 
-    /**
-     * AbstractService constructor.
-     */
     public function __construct(protected Store $store, protected ?LoggerInterface $logger = null)
     {
     }
 
-    /**
-     * @return $this
-     */
     public function platform(?string $platform, ?string $platformVersion): static
     {
         $this->platform = $platform;
@@ -78,8 +72,8 @@ abstract class RedeHttpClient
             'Transaction-Response: brand-return-opened',
         ];
 
-        if ($this->store->getAccessToken()) {
-            $requestHeaders[] = 'Authorization: Bearer ' . $this->store->getAccessToken()->getAccessToken();
+        if ($this->store->getOAuthToken()) {
+            $requestHeaders[] = 'Authorization: Bearer ' . $this->store->getOAuthToken()->getAccessToken();
         }
 
         $parsedBody = $this->parseBody($body, $contentType);
@@ -159,9 +153,6 @@ abstract class RedeHttpClient
         return json_encode($body) ?: '';
     }
 
-    /**
-     * Gets the User-Agent string.
-     */
     private function getUserAgent(): string
     {
         $userAgent = sprintf(
