@@ -2,6 +2,14 @@
 
 SDK de integração eRede
 
+## ⚠️ Atualização Importante - Nova Autenticação
+
+A partir de **janeiro de 2026**, a Rede implementou um novo método de autenticação baseado em **OAuth2** para aprimorar a segurança das transações.
+
+**A versão 2.x deste SDK é compatível com o novo método de autenticação OAuth2**, garantindo uma transição suave e segura para os desenvolvedores.
+
+Para mais detalhes sobre a nova autenticação e migração, consulte a [documentação oficial da e-Rede](https://developer.userede.com.br/e-rede).
+
 ## Funcionalidades
 
 Este SDK possui as seguintes funcionalidades:
@@ -27,7 +35,7 @@ Se já possui um arquivo `composer.json`, basta adicionar a seguinte dependênci
 ```json
 {
   "require": {
-    "silbeckdevs/erede-php": "*"
+    "silbeckdevs/erede-php": "^2.0.0"
   }
 }
 ```
@@ -386,3 +394,30 @@ if ($transaction->getReturnCode() == '00') {
 - Ao criar uma transação com `$transaction = (new eRede($store))->create($transaction)` não vai retornar o campo `authorization`, para retornar o campo é preciso fazer uma consulta `$transaction = (new eRede($store))->get('TID123')`
 - O campo `$transaction->getAuthorizationCode()` não está retornando nada, use `$transaction->getBrand()?->getAuthorizationCode()` ou `$transaction->getAuthorization()?->getBrand()?->getAuthorizationCode()`
 - Caso precise acessar o JSON original do response utilize `$transaction?->getHttpResponse()->getBody()`
+
+### Gerenciamento de Token OAuth2
+
+O token de autenticação OAuth2 possui um **tempo de expiração** de 24 minutos. Para otimizar o desempenho e evitar requisições desnecessárias, é recomendado **salvar e reutilizar o token** enquanto ele estiver válido.
+
+**Exemplo de implementação:**
+
+```php
+<?php
+$store = new Store('PV', 'TOKEN', Environment::production());
+$eRedeService = new eRede($store);
+
+// Faça suas requisições...
+
+// Salve o token para reutilização e salve em um local seguro
+$cachedToken = json_encode($eRedeService->getOAuthToken());
+
+// Para reutilizar o token, basta decodificar o JSON e setar no store
+$store->setOAuthToken((new OAuthToken())->populate(json_decode($cachedToken)));
+$eRedeService = new eRede($store);
+```
+
+**Recomendações:**
+
+- Armazene o token em cache (Redis, Memcached) ou banco de dados para ambientes de produção
+- Sempre verifique a expiração antes de reutilizar o token
+- O SDK gerencia automaticamente a renovação quando o token expira
