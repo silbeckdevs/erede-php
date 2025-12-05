@@ -19,15 +19,19 @@ class eRede
 
     private ?string $platformVersion = null;
 
-    /**
-     * eRede constructor.
-     */
     public function __construct(private readonly Store $store, private readonly ?LoggerInterface $logger = null)
     {
         if (empty($this->store->getOAuthToken()) || !$this->store->getOAuthToken()->isValid()) {
-            $oAuthService = new OAuthService($this->store, $this->logger);
-            $this->store->setOAuthToken($oAuthService->generateToken());
+            $this->generateOAuthToken();
         }
+    }
+
+    public function generateOAuthToken(): ?\Rede\OAuthToken
+    {
+        $oauthToken = (new OAuthService($this->store, $this->logger))->generateToken();
+        $this->store->setOAuthToken($oauthToken);
+
+        return $oauthToken;
     }
 
     public function getOAuthToken(): ?OAuthToken
