@@ -2,7 +2,7 @@
 
 namespace Rede;
 
-class OAuthToken
+class OAuthToken implements RedeSerializable
 {
     use SerializeTrait;
     use CreateTrait;
