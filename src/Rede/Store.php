@@ -19,8 +19,10 @@ class Store
         private string $filiation, // TODO rename to clientId
         private string $token, // TODO rename to clientSecret
         ?Environment $environment = null,
+        ?OAuthToken $oauthToken = null,
     ) {
         $this->environment = $environment ?? Environment::production();
+        $this->oauthToken = $oauthToken;
     }
 
     public function getEnvironment(): Environment

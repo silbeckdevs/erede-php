@@ -75,7 +75,13 @@ export REDE_DEBUG=0
 
 Ou copie o arquivo `tests/config/env.test.php.example` para `tests/config/env.test.php` e adicione as suas credenciais
 
-## Autorizando uma transação
+## Configuração da loja
+
+A configuração da loja é feita através da classe `Store`. Ela possui os seguintes parâmetros:
+
+- `filiation`: Número de filiação do estabelecimento (ClientId na versão 2.x)
+- `token`: Chave de Integração (ClientSecret na versão 2.x)
+- `environment`: Ambiente da loja (Production ou Sandbox)
 
 ```php
 <?php
@@ -85,6 +91,13 @@ $store = new Store('PV', 'TOKEN', Environment::production());
 // Configuração da loja em modo sandbox
 // $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
 
+$eRedeService = new \Rede\eRede($store);
+```
+
+## Autorizando uma transação
+
+```php
+<?php
 // Transação que será autorizada
 $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
     '5448280000000007',
@@ -95,7 +108,7 @@ $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
 );
 
 // Autoriza a transação
-$transaction = (new eRede($store))->create($transaction);
+$transaction = $eRedeService->create($transaction);
 
 if ($transaction->getReturnCode() == '00') {
     printf("Transação autorizada com sucesso; tid=%s\n", $transaction->getTid());
@@ -106,12 +119,6 @@ Por padrão, a transação é capturada automaticamente; caso seja necessário a
 
 ```php
 <?php
-// Configuração da loja em modo produção
-$store = new Store('PV', 'TOKEN', Environment::production());
-
-// Configuração da loja em modo sandbox
-// $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
-
 // Transação que será autorizada
 $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
     '5448280000000007',
@@ -122,7 +129,7 @@ $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
 )->capture(false);
 
 // Autoriza a transação
-$transaction = (new eRede($store))->create($transaction);
+$transaction = $eRedeService->create($transaction);
 
 if ($transaction->getReturnCode() == '00') {
     printf("Transação autorizada com sucesso; tid=%s\n", $transaction->getTid());
@@ -134,12 +141,6 @@ if ($transaction->getReturnCode() == '00') {
 
 ```php
 <?php
-// Configuração da loja em modo produção
-$store = new Store('PV', 'TOKEN', Environment::production());
-
-// Configuração da loja em modo sandbox
-// $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
-
 // Transação que será autorizada
 $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
     '5448280000000007',
@@ -153,7 +154,7 @@ $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
 $transaction->setInstallments(3);
 
 // Autoriza a transação
-$transaction = (new eRede($store))->create($transaction);
+$transaction = $eRedeService->create($transaction);
 
 if ($transaction->getReturnCode() == '00') {
     printf("Transação autorizada com sucesso; tid=%s\n", $transaction->getTid());
@@ -164,12 +165,6 @@ if ($transaction->getReturnCode() == '00') {
 
 ```php
 <?php
-// Configuração da loja em modo produção
-$store = new Store('PV', 'TOKEN', Environment::production());
-
-// Configuração da loja em modo sandbox
-// $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
-
 // Transação que será autorizada
 $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
     '5448280000000007',
@@ -180,7 +175,7 @@ $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
 )->additional(1234, 56);
 
 // Autoriza a transação
-$transaction = (new eRede($store))->create($transaction);
+$transaction = $eRedeService->create($transaction);
 
 if ($transaction->getReturnCode() == '00') {
     printf("Transação autorizada com sucesso; tid=%s\n", $transaction->getTid());
@@ -191,12 +186,6 @@ if ($transaction->getReturnCode() == '00') {
 
 ```php
 <?php
-// Configuração da loja em modo produção
-$store = new Store('PV', 'TOKEN', Environment::production());
-
-// Configuração da loja em modo sandbox
-// $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
-
 // Transação que será autorizada
 $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
     '5448280000000007',
@@ -215,7 +204,7 @@ $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
 );
 
 // Autoriza a transação
-$transaction = (new eRede($store))->create($transaction);
+$transaction = $eRedeService->create($transaction);
 
 if ($transaction->getReturnCode() == '00') {
     printf("Transação autorizada com sucesso; tid=%s\n", $transaction->getTid());
@@ -227,12 +216,6 @@ if ($transaction->getReturnCode() == '00') {
 
 ```php
 <?php
-// Configuração da loja em modo produção
-$store = new Store('PV', 'TOKEN', Environment::production());
-
-// Configuração da loja em modo sandbox
-// $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
-
 // Transação que será autorizada
 $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
     '5448280000000007',
@@ -243,7 +226,7 @@ $transaction = (new Transaction(20.99, 'pedido' . time()))->creditCard(
 )->iata('code123', '250');
 
 // Autoriza a transação
-$transaction = (new eRede($store))->create($transaction);
+$transaction = $eRedeService->create($transaction);
 
 if ($transaction->getReturnCode() == '00') {
     printf("Transação autorizada com sucesso; tid=%s\n", $transaction->getTid());
@@ -254,14 +237,8 @@ if ($transaction->getReturnCode() == '00') {
 
 ```php
 <?php
-// Configuração da loja em modo produção
-$store = new Store('PV', 'TOKEN', Environment::production());
-
-// Configuração da loja em modo sandbox
-// $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
-
 // Transação que será capturada
-$transaction =  (new eRede($store))->capture((new Transaction(20.99))->setTid('TID123'));
+$transaction =  $eRedeService->capture((new Transaction(20.99))->setTid('TID123'));
 
 if ($transaction->getReturnCode() == '00') {
     printf("Transação capturada com sucesso; tid=%s\n", $transaction->getTid());
@@ -272,14 +249,8 @@ if ($transaction->getReturnCode() == '00') {
 
 ```php
 <?php
-// Configuração da loja em modo produção
-$store = new Store('PV', 'TOKEN', Environment::production());
-
-// Configuração da loja em modo sandbox
-// $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
-
 // Transação que será cancelada
-$transaction = (new eRede($store))->cancel((new Transaction(20.99))->setTid('TID123'));
+$transaction = $eRedeService->cancel((new Transaction(20.99))->setTid('TID123'));
 
 if ($transaction->getReturnCode() == '359') {
     printf("Transação cancelada com sucesso; tid=%s\n", $transaction->getTid());
@@ -290,13 +261,8 @@ if ($transaction->getReturnCode() == '359') {
 
 ```php
 <?php
-// Configuração da loja em modo produção
-$store = new Store('PV', 'TOKEN', Environment::production());
-
-// Configuração da loja em modo sandbox
-// $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
-
-$transaction = (new eRede($store))->get('TID123');
+// Consulta a transação pelo ID
+$transaction = $eRedeService->get('TID123');
 
 printf("O status atual da autorização é %s\n", $transaction->getAuthorization()->getStatus());
 ```
@@ -305,13 +271,8 @@ printf("O status atual da autorização é %s\n", $transaction->getAuthorization
 
 ```php
 <?php
-// Configuração da loja em modo produção
-$store = new Store('PV', 'TOKEN', Environment::production());
-
-// Configuração da loja em modo sandbox
-// $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
-
-$transaction = (new eRede($store))->getByReference('pedido123');
+// Consulta a transação pela referência
+$transaction = $eRedeService->getByReference('pedido123');
 
 printf("O status atual da autorização é %s\n", $transaction->getAuthorization()->getStatus());
 ```
@@ -320,13 +281,8 @@ printf("O status atual da autorização é %s\n", $transaction->getAuthorization
 
 ```php
 <?php
-// Configuração da loja em modo produção
-$store = new Store('PV', 'TOKEN', Environment::production());
-
-// Configuração da loja em modo sandbox
-// $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
-
-$transaction = (new eRede($store))->getRefunds('TID123');
+// Consulta os cancelamentos de uma transação
+$transaction = $eRedeService->getRefunds('TID123');
 
 printf("O status atual da autorização é %s\n", $transaction->getAuthorization()->getStatus());
 ```
@@ -335,12 +291,6 @@ printf("O status atual da autorização é %s\n", $transaction->getAuthorization
 
 ```php
 <?php
-// Configuração da loja em modo produção
-$store = new Store('PV', 'TOKEN', Environment::production());
-
-// Configuração da loja em modo sandbox
-// $store = new \Rede\Store('PV', 'TOKEN', \Rede\Environment::sandbox());
-
 // Configura a transação que será autorizada após a autenticação
 $transaction = (new Transaction(25, 'pedido' . time()))->debitCard(
     '5277696455399733',
@@ -365,7 +315,7 @@ $transaction->threeDSecure(
 $transaction->addUrl('https://redirecturl.com/3ds/success', Url::THREE_D_SECURE_SUCCESS);
 $transaction->addUrl('https://redirecturl.com/3ds/failure', Url::THREE_D_SECURE_FAILURE);
 
-$transaction = (new eRede($store))->create($transaction);
+$transaction = $eRedeService->create($transaction);
 
 if ($transaction->getReturnCode() == '220') {
     printf("Redirecione o cliente para \"%s\" para autenticação\n", $transaction->getThreeDSecure()->getUrl());
@@ -379,7 +329,7 @@ if ($transaction->getReturnCode() == '220') {
 // Configura a transação para o PIX e passa a data de expiração
 $transaction = (new Transaction(200.99, 'pedido' . time()))->createQrCode(new \DateTimeImmutable('+ 1 hour'));
 
-$transaction = (new eRede($store))->create($transaction);
+$transaction = $eRedeService->create($transaction);
 
 if ($transaction->getReturnCode() == '00') {
     printf(
@@ -391,7 +341,7 @@ if ($transaction->getReturnCode() == '00') {
 
 ## Observações
 
-- Ao criar uma transação com `$transaction = (new eRede($store))->create($transaction)` não vai retornar o campo `authorization`, para retornar o campo é preciso fazer uma consulta `$transaction = (new eRede($store))->get('TID123')`
+- Ao criar uma transação com `$transaction = $eRedeService->create($transaction)` não vai retornar o campo `authorization`, para retornar o campo é preciso fazer uma consulta `$transaction = $eRedeService->get('TID123')`
 - O campo `$transaction->getAuthorizationCode()` não está retornando nada, use `$transaction->getBrand()?->getAuthorizationCode()` ou `$transaction->getAuthorization()?->getBrand()?->getAuthorizationCode()`
 - Caso precise acessar o JSON original do response utilize `$transaction?->getHttpResponse()->getBody()`
 
