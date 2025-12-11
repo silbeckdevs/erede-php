@@ -52,7 +52,7 @@ class Environment implements RedeSerializable
 
     public function getBaseUrlOAuth(): string
     {
-        return $this->isProduction() ? 'https://api.userede.com.br' : 'https://rl7-sandbox-api.useredecloud.com.br';
+        return $this->isProduction() ? 'https://api.userede.com.br/redelabs' : 'https://rl7-sandbox-api.useredecloud.com.br';
     }
 
     /**

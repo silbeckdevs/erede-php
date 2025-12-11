@@ -181,7 +181,7 @@ class AuthUnitTest extends BaseTestCase
         $this->assertSame('https://api.userede.com.br/erede/v2/', $productionEnv->getBaseUrl());
         $this->assertSame('https://sandbox-erede.useredecloud.com.br/v2/', $sandboxEnv->getBaseUrl());
 
-        $this->assertSame('https://api.userede.com.br', $productionEnv->getBaseUrlOAuth());
+        $this->assertSame('https://api.userede.com.br/redelabs', $productionEnv->getBaseUrlOAuth());
         $this->assertSame('https://rl7-sandbox-api.useredecloud.com.br', $sandboxEnv->getBaseUrlOAuth());
 
         $this->assertSame('https://api.userede.com.br/erede/v2/transactions', $productionEnv->getEndpoint('transactions'));
