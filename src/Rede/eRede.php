@@ -7,13 +7,11 @@ use Rede\Service\CancelTransactionService;
 use Rede\Service\CaptureTransactionService;
 use Rede\Service\CreateTransactionService;
 use Rede\Service\GetTransactionService;
+use Rede\Service\OAuthService;
 
-/**
- * phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps.
- */
 class eRede
 {
-    public const VERSION = '6.1.0';
+    public const VERSION = '7.0.0';
 
     public const USER_AGENT = 'eRede/' . eRede::VERSION . ' (PHP %s; Store %s; %s %s) %s';
 
@@ -21,11 +19,24 @@ class eRede
 
     private ?string $platformVersion = null;
 
-    /**
-     * eRede constructor.
-     */
     public function __construct(private readonly Store $store, private readonly ?LoggerInterface $logger = null)
     {
+        if (empty($this->store->getOAuthToken()) || !$this->store->getOAuthToken()->isValid()) {
+            $this->generateOAuthToken();
+        }
+    }
+
+    public function generateOAuthToken(): ?\Rede\OAuthToken
+    {
+        $oauthToken = (new OAuthService($this->store, $this->logger))->generateToken();
+        $this->store->setOAuthToken($oauthToken);
+
+        return $oauthToken;
+    }
+
+    public function getOAuthToken(): ?OAuthToken
+    {
+        return $this->store->getOAuthToken();
     }
 
     /**

@@ -137,12 +137,12 @@ class TransactionUnitTest extends BaseTestCase
                     {
                     "method": "GET",
                     "rel": "transaction",
-                    "href": "https://sandbox-erede.useredecloud.com.br/v1/transactions/12345678"
+                    "href": "https://sandbox-erede.useredecloud.com.br/v2/transactions/12345678"
                     },
                     {
                     "method": "POST",
                     "rel": "refund",
-                    "href": "https://sandbox-erede.useredecloud.com.br/v1/transactions/12345678/refunds"
+                    "href": "https://sandbox-erede.useredecloud.com.br/v2/transactions/12345678/refunds"
                     }
                 ]
             }
@@ -188,12 +188,12 @@ class TransactionUnitTest extends BaseTestCase
                     {
                     "method": "GET",
                     "rel": "refunds",
-                    "href": "https://sandbox-erede.useredecloud.com.br/v1/transactions/12345678/refunds"
+                    "href": "https://sandbox-erede.useredecloud.com.br/v2/transactions/12345678/refunds"
                     },
                     {
                     "method": "POST",
                     "rel": "refund",
-                    "href": "https://sandbox-erede.useredecloud.com.br/v1/transactions/12345678/refunds"
+                    "href": "https://sandbox-erede.useredecloud.com.br/v2/transactions/12345678/refunds"
                     }
                 ]
             }
