@@ -1,4 +1,5 @@
 parameters:
+  phpVersion: 80200 # PHP 8.2.0
   level: 8
   paths:
     - ./

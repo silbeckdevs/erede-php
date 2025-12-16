@@ -8,15 +8,15 @@ use Rede\Store;
 
 abstract class RedeHttpClient
 {
-    public const string GET = 'GET';
+    public const GET = 'GET';
 
-    public const string POST = 'POST';
+    public const POST = 'POST';
 
-    public const string PUT = 'PUT';
+    public const PUT = 'PUT';
 
-    public const string CONTENT_TYPE_JSON = 'application/json; charset=utf8';
+    public const CONTENT_TYPE_JSON = 'application/json; charset=utf8';
 
-    public const string CONTENT_TYPE_FORM_URLENCODED = 'application/x-www-form-urlencoded';
+    public const CONTENT_TYPE_FORM_URLENCODED = 'application/x-www-form-urlencoded';
 
     private ?string $platform = null;
 
