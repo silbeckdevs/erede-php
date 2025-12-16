@@ -8,7 +8,6 @@ on:
   workflow_dispatch:
 
 env:
-  PHP_VERSION: 8.3
   PHP_EXTENSIONS: mbstring
   PHP_TOOLS: composer:v2, phpunit:11
   REDE_PV: ${{ secrets.REDE_PV }}
@@ -23,14 +22,19 @@ jobs:
   run-tests:
     if: ${{ !github.event.pull_request.draft }}
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: ["8.2", "8.3"]
+
     steps:
       - uses: actions/checkout@v6
 
-      - name: Install PHP ${{ env.PHP_VERSION }}
+      - name: Setup PHP ${{ matrix.php-version }}
         uses: shivammathur/setup-php@v2
         with:
           coverage: none
-          php-version: ${{ env.PHP_VERSION }}
+          php-version: ${{ matrix.php-version }}
           extensions: ${{ env.PHP_EXTENSIONS }}
           tools: ${{ env.PHP_TOOLS }}
 
@@ -54,5 +58,9 @@ jobs:
       - name: PHP Coding Standards Fixer
         run: composer format:check
 
-      - name: Run PHPUnit
-        run: composer phpunit
+      - name: Run unit tests
+        run: composer test:unit
+
+      - name: Run e2e tests
+        if: ${{ matrix.php-version == '8.3' }}
+        run: composer test:e2e
