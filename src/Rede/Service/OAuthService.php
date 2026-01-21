@@ -32,7 +32,7 @@ class OAuthService extends RedeHttpClient
         );
 
         if (!$httpResponse->isSuccess()) {
-            throw new RedeException('Failed to generate access token', $httpResponse->getStatusCode());
+            throw new RedeException("Failed to generate access token: {$httpResponse->getBody()}", $httpResponse->getStatusCode());
         }
 
         $oauthToken = (new OAuthToken())->populate(json_decode($httpResponse->getBody()));
