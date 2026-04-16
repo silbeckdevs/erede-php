@@ -40,7 +40,7 @@ class QrCode implements RedeSerializable
     public function jsonSerialize(): array
     {
         return [
-            'dateTimeExpiration' => $this->getDateTimeExpiration()?->format('c') ?: null,
+            'dateTimeExpiration' => $this->getDateTimeExpiration()?->format('Y-m-d\TH:i:s') ?: null,
         ];
     }
 
