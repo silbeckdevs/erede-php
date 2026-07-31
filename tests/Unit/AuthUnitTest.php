@@ -79,7 +79,6 @@ class AuthUnitTest extends BaseTestCase
             ->setExpiresIn(1800);
 
         $array = $tokenForArray->toArray();
-        $this->assertIsArray($array);
         $this->assertArrayHasKey('token_type', $array);
         $this->assertArrayHasKey('access_token', $array);
         $this->assertArrayHasKey('expires_in', $array);
@@ -96,7 +95,6 @@ class AuthUnitTest extends BaseTestCase
             ->setScope('read');
 
         $jsonArray = $tokenForJson->jsonSerialize();
-        $this->assertIsArray($jsonArray);
         $this->assertSame('Bearer', $jsonArray['token_type']);
         $this->assertSame('json_test_token', $jsonArray['access_token']);
         $this->assertSame(3600, $jsonArray['expires_in']);

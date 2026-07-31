@@ -35,6 +35,7 @@ abstract class RedeHttpClient
     }
 
     /**
+     * @param non-empty-string                      $method
      * @param string|array<string|int,mixed>|object $body
      * @param array<string|int, string>             $headers
      *
@@ -95,7 +96,8 @@ abstract class RedeHttpClient
             }
         }
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array_merge($customHeaders, $requestHeaders));
+        $sendHeaders = array_merge($customHeaders, $requestHeaders);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $sendHeaders);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
         $this->logger?->debug(
@@ -104,7 +106,7 @@ abstract class RedeHttpClient
                     "Request Rede\n%s %s\n%s\n\n%s",
                     $method,
                     $url,
-                    implode("\n", $headers),
+                    implode("\n", $sendHeaders),
                     preg_replace('/"(cardHolderName|cardnumber|securitycode)":"[^"]+"/i', '"\1":"***"', $parsedBody)
                 )
             )
@@ -189,16 +191,10 @@ abstract class RedeHttpClient
      */
     private function dumpHttpInfo(array $httpInfo): void
     {
-        foreach ($httpInfo as $key => $info) {
-            if (is_array($info)) {
-                foreach ($info as $infoKey => $infoValue) {
-                    $this->logger?->debug(sprintf('Curl[%s][%s]: %s', $key, $infoKey, implode(',', $infoValue)));
-                }
-
-                continue;
-            }
-
-            $this->logger?->debug(sprintf('Curl[%s]: %s', $key, $info));
+        if (!$this->logger) {
+            return;
         }
+
+        $this->logger->debug(sprintf('Curl: %s', json_encode($httpInfo, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)));
     }
 }

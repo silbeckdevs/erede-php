@@ -23,6 +23,8 @@ abstract class AbstractService extends RedeHttpClient
     abstract public function execute(): Transaction;
 
     /**
+     * @param non-empty-string $method
+     *
      * @throws \RuntimeException
      */
     protected function sendRequest(string $body = '', string $method = 'GET'): Transaction
