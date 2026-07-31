@@ -7,6 +7,8 @@ class QrCode implements RedeSerializable
     use SerializeTrait;
     use CreateTrait;
 
+    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
+
     private ?\DateTimeInterface $dateTimeExpiration = null;
 
     // Campos que retornam apenas na consulta
@@ -40,7 +42,7 @@ class QrCode implements RedeSerializable
     public function jsonSerialize(): array
     {
         return [
-            'dateTimeExpiration' => $this->getDateTimeExpiration()?->format('c') ?: null,
+            'dateTimeExpiration' => $this->getDateTimeExpiration()?->format(self::DATE_TIME_FORMAT) ?: null,
         ];
     }
 
