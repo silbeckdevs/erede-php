@@ -85,9 +85,43 @@ abstract class AbstractTransactionsService extends AbstractService
         }
 
         if ($httpResponse->getStatusCode() >= 400) {
-            throw new RedeException($this->transaction->getReturnMessage() ?? 'Error on getting the content from the API', (int) $this->transaction->getReturnCode(), $previous);
+            throw new RedeException($this->buildErrorMessage($httpResponse), (int) $this->transaction->getReturnCode(), $previous, $this->transaction, $httpResponse);
         }
 
         return $this->transaction;
+    }
+
+    private function buildErrorMessage(\Rede\Http\RedeResponse $httpResponse): string
+    {
+        $message = $this->transaction?->getReturnMessage() ?? 'Error on getting the content from the API';
+
+        try {
+            $decoded = json_decode($httpResponse->getBody(), true);
+            if (!is_array($decoded) || empty($decoded['brand'])) {
+                return $message;
+            }
+
+            $brand = $decoded['brand'];
+            $brandDetails = [];
+            if (!empty($brand['name'])) {
+                $brandDetails[] = 'name=' . (string) $brand['name'];
+            }
+
+            if (!empty($brand['returnCode'])) {
+                $brandDetails[] = 'returnCode=' . (string) $brand['returnCode'];
+            }
+
+            if (!empty($brand['returnMessage'])) {
+                $brandDetails[] = 'returnMessage=' . (string) $brand['returnMessage'];
+            }
+
+            if (empty($brandDetails)) {
+                return $message;
+            }
+
+            return sprintf('%s | Brand: %s', $message, implode(', ', $brandDetails));
+        } catch (\Exception $e) {
+            return $message;
+        }
     }
 }
