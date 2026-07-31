@@ -28,7 +28,7 @@ jobs:
         php-version: ["8.2", "8.3"]
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup PHP ${{ matrix.php-version }}
         uses: shivammathur/setup-php@v2
@@ -42,15 +42,21 @@ jobs:
         id: composer-cache
         run: |
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
+      - name: Validate composer files
+        run: composer validate --strict
+
       - name: Install dependencies
-        run: composer update --no-interaction --no-progress
+        run: composer install --no-interaction --no-progress
+
+      - name: Security audit
+        run: composer audit --no-dev
 
       - name: Static analysis
         run: composer phpstan
