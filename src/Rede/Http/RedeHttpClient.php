@@ -133,8 +133,6 @@ abstract class RedeHttpClient
             throw new \RuntimeException('Error obtaining a response from the API');
         }
 
-        curl_close($curl);
-
         return new RedeResponse($httpInfo['http_code'], $response);
     }
 
