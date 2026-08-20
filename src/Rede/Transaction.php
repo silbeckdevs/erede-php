@@ -48,6 +48,10 @@ class Transaction implements RedeSerializable, RedeUnserializable
 
     private int|string|null $expirationYear = null;
 
+    private ?string $tokenCryptogram = null;
+
+    private ?string $cardToken = null;
+
     private ?Iata $iata = null;
 
     private ?int $installments = null;
@@ -168,6 +172,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
         int|string $expirationYear,
         string $cardHolderName,
         string $kind,
+        ?string $tokenCryptogram = null,
     ): static {
         $this->setCardNumber($cardNumber);
         $this->setSecurityCode($securityCode);
@@ -175,6 +180,7 @@ class Transaction implements RedeSerializable, RedeUnserializable
         $this->setExpirationYear($expirationYear);
         $this->setCardHolderName($cardHolderName);
         $this->setKind($kind);
+        $this->setTokenCryptogram($tokenCryptogram);
 
         return $this;
     }
@@ -241,6 +247,8 @@ class Transaction implements RedeSerializable, RedeUnserializable
                 'cardNumber' => $this->cardNumber,
                 'expirationMonth' => $this->expirationMonth,
                 'expirationYear' => $this->expirationYear,
+                'tokenCryptogram' => $this->tokenCryptogram ?: null,
+                'cardToken' => $this->cardToken ?: null,
                 'securityCode' => $this->securityCode,
                 'softDescriptor' => $this->softDescriptor,
                 'subscription' => $this->subscription,
@@ -410,6 +418,36 @@ class Transaction implements RedeSerializable, RedeUnserializable
     public function setExpirationYear(int|string $expirationYear): static
     {
         $this->expirationYear = $expirationYear;
+
+        return $this;
+    }
+
+    public function getTokenCryptogram(): ?string
+    {
+        return $this->tokenCryptogram;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setTokenCryptogram(?string $tokenCryptogram = null): static
+    {
+        $this->tokenCryptogram = $tokenCryptogram;
+
+        return $this;
+    }
+
+    public function getCardToken(): ?string
+    {
+        return $this->cardToken;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setCardToken(?string $cardToken = null): static
+    {
+        $this->cardToken = $cardToken;
 
         return $this;
     }

@@ -63,6 +63,19 @@ class TransactionUnitTest extends BaseTestCase
         $this->assertSame('306718396', $transaction->getCapture()->getNsu());
     }
 
+    public function testShouldSerializeTokenCryptogramAndCardToken(): void
+    {
+        $transaction = (new Transaction(100, 'ref-token'))
+            ->creditCard('5448280000000007', '123', 1, 2030, 'John Doe')
+            ->setCardToken('network-token-id')
+            ->setTokenCryptogram('cryptogram-value');
+
+        $serialized = $transaction->jsonSerialize();
+
+        $this->assertSame('network-token-id', $serialized['cardToken']);
+        $this->assertSame('cryptogram-value', $serialized['tokenCryptogram']);
+    }
+
     public function testGetAuthorizationCodeValid(): void
     {
         // Cenário 1: AuthorizationCode diretamente na transação

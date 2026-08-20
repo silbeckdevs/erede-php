@@ -107,7 +107,7 @@ abstract class RedeHttpClient
                     $method,
                     $url,
                     implode("\n", $sendHeaders),
-                    preg_replace('/"(cardHolderName|cardnumber|securitycode)":"[^"]+"/i', '"\1":"***"', $parsedBody)
+                    preg_replace('/"(cardHolderName|cardnumber|cardToken|tokenCryptogram|securitycode)":"[^"]+"/i', '"\1":"***"', $parsedBody)
                 )
             )
         );
