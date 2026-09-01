@@ -310,7 +310,16 @@ $transaction->threeDSecure(
         screenHeight: 500,
         screenWidth: 500,
         timeZoneOffset: 3
-    )
+    ),
+    billing: new BillingAddress(
+        address: 'Rua Pedro Luiz',
+        city: 'Guarulhos',
+        postalcode: '07151-385',
+        state: 'SP',
+        country: 'Brasil',
+        emailAddress: 'email@user.com',
+        phoneNumber: '(11)91234-5678',
+    ),
 );
 $transaction->addUrl('https://redirecturl.com/3ds/success', Url::THREE_D_SECURE_SUCCESS);
 $transaction->addUrl('https://redirecturl.com/3ds/failure', Url::THREE_D_SECURE_FAILURE);

@@ -41,6 +41,8 @@ class ThreeDSecure implements RedeSerializable
 
     private ?string $challengePreference = null;
 
+    private ?BillingAddress $billing = null;
+
     /**
      * ThreeDSecure constructor.
      *
@@ -249,5 +251,31 @@ class ThreeDSecure implements RedeSerializable
         $this->challengePreference = $challengePreference;
 
         return $this;
+    }
+
+    public function getBilling(): ?BillingAddress
+    {
+        return $this->billing;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setBilling(?BillingAddress $billing): static
+    {
+        $this->billing = $billing;
+
+        return $this;
+    }
+
+    /**
+     * @return array<string, class-string>
+     */
+    protected function getObjectMapping(): array
+    {
+        return [
+            'device' => Device::class,
+            'billing' => BillingAddress::class,
+        ];
     }
 }

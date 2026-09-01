@@ -720,10 +720,15 @@ class Transaction implements RedeSerializable, RedeUnserializable
         string $directoryServerTransactionId = '',
         ?string $userAgent = null,
         int $threeDIndicator = 2,
+        ?BillingAddress $billing = null,
     ): static {
         $threeDSecure = new ThreeDSecure($device, $onFailure, $mpi, $userAgent);
         $threeDSecure->setThreeDIndicator($threeDIndicator);
         $threeDSecure->setDirectoryServerTransactionId($directoryServerTransactionId);
+
+        if (null !== $billing) {
+            $threeDSecure->setBilling($billing);
+        }
 
         $this->threeDSecure = $threeDSecure;
 
