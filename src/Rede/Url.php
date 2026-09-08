@@ -12,6 +12,8 @@ class Url implements RedeSerializable
 
     public const THREE_D_SECURE_SUCCESS = 'threeDSecureSuccess';
 
+    public const THREE_D_SECURE_CALLBACK = 'threeDSecureCallback';
+
     public function __construct(private string $url, private string $kind = Url::CALLBACK)
     {
     }

@@ -323,6 +323,7 @@ $transaction->threeDSecure(
 );
 $transaction->addUrl('https://redirecturl.com/3ds/success', Url::THREE_D_SECURE_SUCCESS);
 $transaction->addUrl('https://redirecturl.com/3ds/failure', Url::THREE_D_SECURE_FAILURE);
+$transaction->addUrl('https://redirecturl.com/3ds/callback', Url::THREE_D_SECURE_CALLBACK);
 
 $transaction = $eRedeService->create($transaction);
 
